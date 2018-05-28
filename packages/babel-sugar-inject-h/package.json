@@ -1,0 +1,42 @@
+{
+  "name": "@vuejs/babel-sugar-inject-h",
+  "version": "0.1.0",
+  "description": "Babel syntactic sugar for h automatic injection for Vue JSX",
+  "main": "dist/plugin.js",
+  "repository": "https://github.com/vuejs/jsx/tree/master/packages/babel-sugar-inject-h",
+  "author": "Nick Messing <dot.nick.dot.messing@gmail.com",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "prepublish": "yarn build",
+    "build": "rollup -c",
+    "build:test": "rollup -c rollup.config.testing.js",
+    "pretest": "yarn build:test",
+    "test": "nyc --reporter=html --reporter=text ava -v test/test.js"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.49",
+    "@babel/core": "^7.0.0-beta.49",
+    "@babel/preset-env": "^7.0.0-beta.49",
+    "ava": "^0.25.0",
+    "jsdom": "^11.11.0",
+    "jsdom-global": "^3.0.2",
+    "nyc": "^11.8.0",
+    "rollup": "^0.59.4",
+    "rollup-plugin-babel": "beta",
+    "rollup-plugin-istanbul": "^2.0.1",
+    "rollup-plugin-uglify-es": "^0.0.1",
+    "vue": "^2.5.16",
+    "vue-template-compiler": "^2.5.16",
+    "vue-test-utils": "^1.0.0-beta.11"
+  },
+  "dependencies": {
+    "@babel/plugin-syntax-jsx": "^7.0.0-beta.49"
+  },
+  "nyc": {
+    "exclude": [
+      "dist",
+      "test"
+    ]
+  }
+}

@@ -12,7 +12,7 @@ export default {
           {
             targets: {
               browsers: [
-                'ie 11', // es5
+                'IE 9', // ES5
               ],
             },
             modules: false,

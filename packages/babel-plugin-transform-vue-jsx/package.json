@@ -1,0 +1,45 @@
+{
+  "name": "@vuejs/babel-plugin-transform-vue-jsx",
+  "version": "0.1.0",
+  "description": "Babel plugin for Vue 2.0 JSX",
+  "main": "dist/plugin.js",
+  "module": "dist/plugin.esm.js",
+  "repository": "https://github.com/vuejs/jsx/tree/master/packages/babel-plugin-transform-vue-jsx",
+  "author": "Evan You",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "pretest:snapshot": "yarn build:test",
+    "test:snapshot": "nyc --reporter=html --reporter=text ava -v test/snapshot.js",
+    "pretest:functional":
+      "yarn build:test && nyc --reporter=html --reporter=text babel test/functional.js --plugins ./dist/plugin.testing.js --out-file test/functional-compiled.js",
+    "test:functional": "ava -v test/functional-compiled.js",
+    "build": "rollup -c",
+    "build:test": "rollup -c rollup.config.testing.js",
+    "test":
+      "rm -rf coverage* && yarn test:snapshot && mv coverage coverage-snapshot && yarn test:functional && mv coverage coverage-functional"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.49",
+    "@babel/core": "^7.0.0-beta.49",
+    "@types/babel-traverse": "^6.25.3",
+    "@types/babel-types": "^7.0.2",
+    "ava": "^0.25.0",
+    "jsdom": "^11.11.0",
+    "jsdom-global": "^3.0.2",
+    "nyc": "^11.8.0",
+    "rollup": "^0.59.4",
+    "rollup-plugin-istanbul": "^2.0.1",
+    "vue": "^2.5.16",
+    "vue-template-compiler": "^2.5.16",
+    "vue-test-utils": "^1.0.0-beta.11"
+  },
+  "dependencies": {
+    "@babel/helper-module-imports": "^7.0.0-beta.49",
+    "@babel/plugin-syntax-jsx": "^7.0.0-beta.49",
+    "@vuejs/babel-helper-vue-jsx-merge-props": "^0.1.0"
+  },
+  "nyc": {
+    "exclude": ["dist", "test"]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "postinstall": "lerna bootstrap",
+    "test": "lerna run test"
+  },
+  "devDependencies": {
+    "lerna": "^2.9.1"
+  }
+}

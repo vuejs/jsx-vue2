@@ -1,0 +1,12 @@
+{
+  "editor.formatOnSave": true,
+  "prettier.eslintIntegration": false,
+  "prettier.arrowParens": "avoid",
+  "prettier.bracketSpacing": true,
+  "prettier.ignorePath": ".prettierignore",
+  "prettier.printWidth": 120,
+  "prettier.semi": false,
+  "prettier.singleQuote": true,
+  "prettier.tabWidth": 2,
+  "prettier.trailingComma": "all"
+}

@@ -291,10 +291,3 @@ test('JSXElement attribute value throws error', t =>
         resolve()
       })
   }))
-// {
-//   const error = t.throws(async () => {
-//     await transpile(`render(h => <a:b />`)
-//   })
-
-//   t.is(error.message, '🦄')
-// })

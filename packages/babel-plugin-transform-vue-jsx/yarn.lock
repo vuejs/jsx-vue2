@@ -595,16 +595,6 @@
     pretty-ms "^0.2.1"
     text-table "^0.2.0"
 
-"@types/babel-traverse@^6.25.3":
-  version "6.25.3"
-  resolved "https://registry.yarnpkg.com/@types/babel-traverse/-/babel-traverse-6.25.3.tgz#34dd69d1e469aee75e20ba00fbc52c7bc717b1c8"
-  dependencies:
-    "@types/babel-types" "*"
-
-"@types/babel-types@*", "@types/babel-types@^7.0.2":
-  version "7.0.2"
-  resolved "https://registry.yarnpkg.com/@types/babel-types/-/babel-types-7.0.2.tgz#63dc3e5e7f6367e1819d2bba5213783cd926c5d5"
-
 "@types/estree@0.0.39":
   version "0.0.39"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"

@@ -11,7 +11,7 @@
     "build:testing": "rollup -c rollup.config.testing.js",
     "build": "rollup -c",
     "pretest": "yarn build:testing",
-    "test": "nyc --reporter=html --reporter=text ava -v test/test.js",
+    "test": "nyc --reporter=html --reporter=text-summary ava -v test/test.js",
     "prepublish": "yarn build"
   },
   "devDependencies": {

@@ -9,8 +9,8 @@
   "private": false,
   "scripts": {
     "pretest:snapshot": "yarn build:test",
-    "test:snapshot": "nyc --reporter=html --reporter=text ava -v test/snapshot.js",
-    "pretest:functional": "yarn build:test && nyc --reporter=html --reporter=text babel test/functional.js --plugins ./dist/plugin.testing.js --out-file test/functional-compiled.js",
+    "test:snapshot": "nyc --reporter=html --reporter=text-summary ava -v test/snapshot.js",
+    "pretest:functional": "yarn build:test && nyc --reporter=html --reporter=text-summary babel test/functional.js --plugins ./dist/plugin.testing.js --out-file test/functional-compiled.js",
     "test:functional": "ava -v test/functional-compiled.js",
     "build": "rollup -c",
     "build:test": "rollup -c rollup.config.testing.js",

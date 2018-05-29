@@ -12,7 +12,7 @@
     "build": "rollup -c",
     "build:test": "rollup -c rollup.config.testing.js",
     "pretest": "yarn build:test",
-    "test": "nyc --reporter=html --reporter=text ava -v test/test.js"
+    "test": "nyc --reporter=html --reporter=text-summary ava -v test/test.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.49",

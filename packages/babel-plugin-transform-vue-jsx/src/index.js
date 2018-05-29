@@ -3,7 +3,7 @@ import { addDefault } from '@babel/helper-module-imports'
 
 const xlinkRE = /^xlink([A-Z])/
 const directiveRE = /^v-/
-const rootAttributes = ['class', 'style', 'key', 'ref', 'refInFor', 'slot', 'scopedSlots']
+const rootAttributes = ['class', 'style', 'key', 'ref', 'refInFor', 'slot', 'scopedSlots', 'model']
 const prefixes = ['props', 'domProps', 'on', 'nativeOn', 'hook', 'attrs']
 const domPropsValueElements = ['input', 'textarea', 'option', 'select']
 const domPropsElements = [...domPropsValueElements, 'video']

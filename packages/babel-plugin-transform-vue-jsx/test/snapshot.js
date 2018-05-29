@@ -82,7 +82,13 @@ const tests = [
         key="key"
         ref="ref"
         refInFor
-        slot="slot">
+        slot="slot"
+        model={{
+          value: this.txt,
+          callback: $$v => {
+            this.txt = $$v
+          }
+        }}>
       </div>
     ))`,
     to: `render(h => h("div", {
@@ -91,7 +97,13 @@ const tests = [
   "key": "key",
   "ref": "ref",
   "refInFor": true,
-  "slot": "slot"
+  "slot": "slot",
+  "model": {
+    value: this.txt,
+    callback: $$v => {
+      this.txt = $$v;
+    }
+  }
 }));`,
   },
   {

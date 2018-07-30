@@ -4,7 +4,7 @@
   "description": "Babel syntactic sugar for functional components",
   "main": "dist/plugin.js",
   "repository": "https://github.com/vuejs/jsx/tree/master/packages/babel-sugar-functional-vue",
-  "author": "Nick Messing <dot.nick.dot.messing@gmail.com",
+  "author": "Nick Messing <dot.nick.dot.messing@gmail.com>",
   "license": "MIT",
   "private": false,
   "scripts": {

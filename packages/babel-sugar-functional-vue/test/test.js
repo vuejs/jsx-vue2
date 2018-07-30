@@ -31,6 +31,17 @@ const tests = [
 };`,
   },
   {
+    name: 'Default export functional component',
+    from: `export default ({ props, listeners }) => <div onClick={listeners.click}>{props.msg}</div>`,
+    to: `export default {
+  functional: true,
+  render: (h, {
+    props,
+    listeners
+  }) => <div onClick={listeners.click}>{props.msg}</div>
+};`,
+  },
+  {
     name: 'Named functional component in DevMode',
     NODE_ENV: 'development',
     from: `export const A = ({ props, listeners }) => <div onClick={listeners.click}>{props.msg}</div>`,

@@ -65,6 +65,23 @@ const tests = [
 
 });`,
   },
+  {
+    name: 'Default export',
+    from: `export default ({ props, listeners }) => <div onClick={listeners.click}>{props.msg}</div>`,
+    to: `export default {
+  functional: true,
+  render: (h, {
+    props,
+    listeners
+  }) => <div onClick={listeners.click}>{props.msg}</div>
+};`,
+  },
+  {
+    name: 'Ignore non-arrow function',
+    from: `const a = 2; export default 3`,
+    to: `const a = 2;
+export default 3;`,
+  },
 ]
 
 tests.map(({ name, from, to, NODE_ENV }) => {

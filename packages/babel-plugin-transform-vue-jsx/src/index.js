@@ -161,6 +161,9 @@ const parseAttributeJSXAttribute = (t, path, attributes, tagName, elementType) =
     if (name.startsWith(`v-`)) {
       name = name.replace(directiveRE, '')
       prefix = 'directives'
+    } else if (name.startsWith('v') && name.length >= 2 && name[1] >= 'A' && name[1] <= 'Z') {
+      name = name[1].toLowerCase() + name.substr(2)
+      prefix = 'directives'
     }
     if (name.match(xlinkRE)) {
       name = name.replace(xlinkRE, (_, firstCharacter) => {

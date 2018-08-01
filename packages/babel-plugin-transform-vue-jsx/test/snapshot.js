@@ -215,7 +215,7 @@ render(h => h("div", _mergeJSXProps([{}, spread, {
   },
   {
     name: 'Directives',
-    from: `render(h => <div v-test={ 123 } v-other={ 234 } />)`,
+    from: `render(h => <div v-test={ 123 } vOther={ 234 } />)`,
     to: `render(h => h("div", {
   "directives": [{
     name: "test",

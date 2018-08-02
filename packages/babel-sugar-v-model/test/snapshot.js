@@ -25,11 +25,6 @@ const tests = [
     to: `const A = <A x="y" a:b={c} />;`,
   },
   {
-    name: 'Ignores static vModel arguments',
-    from: `const A = <A vModel="y" />`,
-    to: `const A = <A vModel="y" />;`,
-  },
-  {
     name: 'Generic component vModel',
     from: `const A = <MyComponent vModel={a.b} />`,
     to: `const A = <MyComponent model={{
@@ -50,8 +45,8 @@ const tests = [
 }} />;`,
   },
   {
-    name: 'Component vModel:number',
-    from: `const A = <MyComponent vModel:number={a.b} />`,
+    name: 'Component vModel_number',
+    from: `const A = <MyComponent vModel_number={a.b} />`,
     to: `const A = <MyComponent model={{
   value: a.b,
   callback: $$v => {
@@ -60,8 +55,8 @@ const tests = [
 }} />;`,
   },
   {
-    name: 'Component vModel:trim',
-    from: `const A = <MyComponent vModel:trim={a.b} />`,
+    name: 'Component vModel_trim',
+    from: `const A = <MyComponent vModel_trim={a.b} />`,
     to: `const A = <MyComponent model={{
   value: a.b,
   callback: $$v => {
@@ -70,8 +65,8 @@ const tests = [
 }} />;`,
   },
   {
-    name: 'Component vModel:number-trim',
-    from: `const A = <MyComponent vModel:number-trim={a.b} />`,
+    name: 'Component vModel_number_trim',
+    from: `const A = <MyComponent vModel_number_trim={a.b} />`,
     to: `const A = <MyComponent model={{
   value: a.b,
   callback: $$v => {
@@ -104,8 +99,8 @@ const tests = [
 }} />;`,
   },
   {
-    name: 'select vModel:number',
-    from: `const A = <select vModel:number={a.b} />`,
+    name: 'select vModel_number',
+    from: `const A = <select vModel_number={a.b} />`,
     to: `const A = <select on-change={$event => {
   const $$selectedVal = Array.prototype.filter.call($event.target.options, o => o.selected).map(o => this._n("_value" in o ? o._value : o.value));
   a.b = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
@@ -148,8 +143,8 @@ const tests = [
 }} />;`,
   },
   {
-    name: 'input[type="checkbox"] vModel:number',
-    from: `const A = <input type="checkbox" vModel:number={a.b} />`,
+    name: 'input[type="checkbox"] vModel_number',
+    from: `const A = <input type="checkbox" vModel_number={a.b} />`,
     to: `const A = <input type="checkbox" domProps-checked={Array.isArray(a.b) ? this._i(a.b, null) > -1 : a.b} on-change={$event => {
   const $$a = a.b,
         $$el = $event.target,
@@ -219,8 +214,8 @@ const tests = [
 }} />;`,
   },
   {
-    name: 'input[type="radio"] vModel:number',
-    from: `const A = <input type="radio" vModel:number={a.b} value="10" />`,
+    name: 'input[type="radio"] vModel_number',
+    from: `const A = <input type="radio" vModel_number={a.b} value="10" />`,
     to: `const A = <input type="radio" domProps-checked={this._q(a.b, this._n("10"))} on-change={$event => {
   a.b = this._n("10");
 }} {...{
@@ -262,8 +257,8 @@ const tests = [
 }} />;`,
   },
   {
-    name: 'input[type="text"] vModel:lazy-trim-number',
-    from: `const A = <input type="text" vModel:lazy-trim-number={a.b} />`,
+    name: 'input[type="text"] vModel_lazy_trim_number',
+    from: `const A = <input type="text" vModel_lazy_trim_number={a.b} />`,
     to: `const A = <input type="text" domProps-value={a.b} on-change={$event => {
   a.b = this._n($event.target.value.trim());
 }} on-blur={$event => {
@@ -317,6 +312,19 @@ test('div[vModel] throws an error', t =>
       })
       .catch(e => {
         t.is(e.message, 'vModel: div[type=] is not supported')
+        resolve()
+      })
+  }))
+
+test('static vModel throws an error', t =>
+  new Promise(resolve => {
+    transpile(`render(h => <div vModel="test" />)`)
+      .then(() => {
+        t.fail()
+        resolve()
+      })
+      .catch(e => {
+        t.is(e.message, 'You have to use JSX Expression inside your v-model')
         resolve()
       })
   }))

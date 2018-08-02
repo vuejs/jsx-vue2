@@ -215,14 +215,19 @@ render(h => h("div", _mergeJSXProps([{}, spread, {
   },
   {
     name: 'Directives',
-    from: `render(h => <div v-test={ 123 } vOtherStuff={ 234 } />)`,
+    from: `render(h => <div v-test={ 123 } vOtherStuff--argument:modifier1-modifier2={ 234 } />)`,
     to: `render(h => h("div", {
   "directives": [{
     name: "test",
     value: 123
   }, {
     name: "other-stuff",
-    value: 234
+    value: 234,
+    arg: "argument",
+    modifiers: {
+      "modifier1": true,
+      "modifier2": true
+    }
   }]
 }));`,
   },

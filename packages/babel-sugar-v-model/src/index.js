@@ -24,7 +24,12 @@ export default function(babel) {
       Program(path) {
         path.traverse({
           JSXAttribute(path) {
-            const { isVModel, modifiers, valuePath } = parseVModel(t, path)
+            const parsed = parseVModel(t, path)
+            if (!parsed) {
+              return
+            }
+
+            const { isVModel, modifiers, valuePath } = parsed
 
             if (isVModel) {
               const parent = path.parentPath
@@ -46,23 +51,21 @@ export default function(babel) {
  * @returns Object<{ isVModel: boolean, modifiers: Set<string>, valuePath: Path<Expression>}>
  */
 const parseVModel = (t, path) => {
-  let isVModel = false
+  if (
+    (t.isJSXNamespacedName(path.get('name')) && !equalCamel(path.get('name.namespace.name').node, 'v-model')) ||
+    !equalCamel(path.get('name.name').node, 'v-model')
+  ) {
+    return null
+  }
   let modifiers = null
   if (!t.isJSXExpressionContainer(path.get('value'))) {
-    return { isVModel: false }
-  } else if (t.isJSXIdentifier(path.get('name')) && equalCamel(path.get('name.name').node, 'v-model')) {
-    isVModel = true
+    throw new Error('You have to use JSX Expression inside your v-model')
+  } else if (t.isJSXIdentifier(path.get('name'))) {
     modifiers = new Set()
-  } else if (
-    t.isJSXNamespacedName(path.get('name')) &&
-    t.isJSXIdentifier(path.get('name.namespace')) &&
-    equalCamel(path.get('name.namespace.name').node, 'v-model')
-  ) {
-    isVModel = true
+  } else {
     modifiers = new Set(path.get('name.name.name').node.split('-'))
   }
   return {
-    isVModel,
     modifiers: modifiers,
     valuePath: isVModel ? path.get('value.expression') : null,
   }

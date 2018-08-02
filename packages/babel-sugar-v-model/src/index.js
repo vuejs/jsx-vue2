@@ -53,16 +53,16 @@ const parseVModel = (t, path) => {
   if (t.isJSXNamespacedName(path.get('name')) || !startsWithCamel(path.get('name.name').node, 'v-model')) {
     return null
   }
-  let modifiers = null
-  let _
+
   if (!t.isJSXExpressionContainer(path.get('value'))) {
     throw new Error('You have to use JSX Expression inside your v-model')
-  } else if (t.isJSXIdentifier(path.get('name'))) {
-    ;[_, ...modifiers] = path.get('name.name').node.split('_')
-    modifiers = new Set(modifiers)
   }
+
+  const modifiers = path.get('name.name').node.split('_')
+  modifiers.shift()
+
   return {
-    modifiers: modifiers,
+    modifiers: new Set(modifiers),
     valuePath: path.get('value.expression'),
   }
 }

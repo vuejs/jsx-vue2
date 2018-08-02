@@ -137,18 +137,18 @@ const parseAttributeJSXAttribute = (t, path, attributes, tagName, elementType) =
   let name
   let modifiers
   let argument
-  /* istanbul ignore else */
-  if (t.isJSXNamespacedName(namePath) && isDirective(namePath.get('namespace.name').node)) {
-    ;[name, argument] = namePath.get('namespace.name').node.split('--')
-    modifiers = namePath.get('name.name').node.split('-')
-  } else if (t.isJSXIdentifier(namePath)) {
-    ;[name, argument] = path.get('name.name').node.split('--')
-    prefix = prefixes.find(el => name.startsWith(el)) || 'attrs'
-    name = name.replace(new RegExp(`^${prefix}\-?`), '')
-    name = name[0].toLowerCase() + name.substr(1)
+  if (t.isJSXNamespacedName(namePath)) {
+    name = `${namePath.get('namespace.name').node}:${namePath.get('name.name').node}`
   } else {
-    throw new Error(`getAttributes (attribute name): ${namePath.type} is not supported`)
+    name = namePath.get('name').node
   }
+
+  ;[name, ...modifiers] = name.split('_')
+  ;[name, argument] = name.split(':')
+
+  prefix = prefixes.find(el => name.startsWith(el)) || 'attrs'
+  name = name.replace(new RegExp(`^${prefix}\-?`), '')
+  name = name[0].toLowerCase() + name.substr(1)
 
   const valuePath = path.get('value')
   let value
@@ -168,14 +168,15 @@ const parseAttributeJSXAttribute = (t, path, attributes, tagName, elementType) =
     }
   }
 
+  value._argument = argument
+  value._modifiers = modifiers
+
   if (rootAttributes.includes(name)) {
     attributes[name] = value
   } else {
     if (isDirective(name)) {
       name = kebabcase(name.substr(1))
       prefix = 'directives'
-      value._argument = argument
-      value._modifiers = modifiers
     }
     if (name.match(xlinkRE)) {
       name = name.replace(xlinkRE, (_, firstCharacter) => {
@@ -269,7 +270,7 @@ const transformDirectives = (t, directives) =>
         ...(directive.value._argument
           ? [t.objectProperty(t.identifier('arg'), t.stringLiteral(directive.value._argument))]
           : []),
-        ...(directive.value._modifiers
+        ...(directive.value._modifiers && directive.value._modifiers.length > 0
           ? [
               t.objectProperty(
                 t.identifier('modifiers'),

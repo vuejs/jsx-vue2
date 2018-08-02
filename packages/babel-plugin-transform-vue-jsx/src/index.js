@@ -25,6 +25,13 @@ const mustUseDomProps = (tag, type, attributeName) => {
 }
 
 /**
+ * Checks if string is describing a directive
+ * @param src string
+ */
+const isDirective = src =>
+  src.startsWith(`v-`) || (src.startsWith('v') && src.length >= 2 && src[1] >= 'A' && src[1] <= 'Z')
+
+/**
  * Get tag (first attribute for h) from JSXOpeningElement
  * @param t
  * @param path JSXOpeningElement
@@ -128,15 +135,20 @@ const parseAttributeJSXAttribute = (t, path, attributes, tagName, elementType) =
   const namePath = path.get('name')
   let prefix
   let name
-  /* istanbul ignore else */
-  if (t.isJSXIdentifier(namePath)) {
-    name = path.get('name.name').node
-    prefix = prefixes.find(el => name.startsWith(el)) || 'attrs'
-    name = name.replace(new RegExp(`^${prefix}\-?`), '')
-    name = name[0].toLowerCase() + name.substr(1)
+  let modifiers
+  let argument
+  if (t.isJSXNamespacedName(namePath)) {
+    name = `${namePath.get('namespace.name').node}:${namePath.get('name.name').node}`
   } else {
-    throw new Error(`getAttributes (attribute name): ${namePath.type} is not supported`)
+    name = namePath.get('name').node
   }
+
+  ;[name, ...modifiers] = name.split('_')
+  ;[name, argument] = name.split(':')
+
+  prefix = prefixes.find(el => name.startsWith(el)) || 'attrs'
+  name = name.replace(new RegExp(`^${prefix}\-?`), '')
+  name = name[0].toLowerCase() + name.substr(1)
 
   const valuePath = path.get('value')
   let value
@@ -156,13 +168,13 @@ const parseAttributeJSXAttribute = (t, path, attributes, tagName, elementType) =
     }
   }
 
+  value._argument = argument
+  value._modifiers = modifiers
+
   if (rootAttributes.includes(name)) {
     attributes[name] = value
   } else {
-    if (name.startsWith(`v-`)) {
-      name = name.replace(directiveRE, '')
-      prefix = 'directives'
-    } else if (name.startsWith('v') && name.length >= 2 && name[1] >= 'A' && name[1] <= 'Z') {
+    if (isDirective(name)) {
       name = kebabcase(name.substr(1))
       prefix = 'directives'
     }
@@ -255,6 +267,21 @@ const transformDirectives = (t, directives) =>
       t.objectExpression([
         t.objectProperty(t.identifier('name'), directive.key),
         t.objectProperty(t.identifier('value'), directive.value),
+        ...(directive.value._argument
+          ? [t.objectProperty(t.identifier('arg'), t.stringLiteral(directive.value._argument))]
+          : []),
+        ...(directive.value._modifiers && directive.value._modifiers.length > 0
+          ? [
+              t.objectProperty(
+                t.identifier('modifiers'),
+                t.objectExpression(
+                  directive.value._modifiers.map(modifier =>
+                    t.objectProperty(t.stringLiteral(modifier), t.booleanLiteral(true)),
+                  ),
+                ),
+              ),
+            ]
+          : []),
       ]),
     ),
   )

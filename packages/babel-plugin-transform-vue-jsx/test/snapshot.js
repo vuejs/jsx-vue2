@@ -215,14 +215,25 @@ render(h => h("div", _mergeJSXProps([{}, spread, {
   },
   {
     name: 'Directives',
-    from: `render(h => <div v-test={ 123 } vOtherStuff={ 234 } />)`,
+    from: `render(h => <div v-test={ 123 } vSomething_modifier={ 1234 } vOtherStuff:argument_modifier1_modifier2={ 234 } />)`,
     to: `render(h => h("div", {
   "directives": [{
     name: "test",
     value: 123
   }, {
+    name: "something",
+    value: 1234,
+    modifiers: {
+      "modifier": true
+    }
+  }, {
     name: "other-stuff",
-    value: 234
+    value: 234,
+    arg: "argument",
+    modifiers: {
+      "modifier1": true,
+      "modifier2": true
+    }
   }]
 }));`,
   },
@@ -277,19 +288,6 @@ render(h => h("div", _mergeJSXProps([{}, spread, {
 ]
 
 tests.forEach(({ name, from, to }) => test(name, async t => t.is(await transpile(from), to)))
-
-test('JSXNamespacedName attribute name throws error', t =>
-  new Promise(resolve => {
-    transpile(`render(h => <a a:b="test" />)`)
-      .then(() => {
-        t.fail()
-        resolve()
-      })
-      .catch(e => {
-        t.is(e.message, 'getAttributes (attribute name): JSXNamespacedName is not supported')
-        resolve()
-      })
-  }))
 
 test('JSXElement attribute value throws error', t =>
   new Promise(resolve => {

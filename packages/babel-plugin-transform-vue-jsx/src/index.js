@@ -1,5 +1,6 @@
 import syntaxJsx from '@babel/plugin-syntax-jsx'
 import { addDefault } from '@babel/helper-module-imports'
+import kebabcase from 'lodash.kebabcase'
 
 const xlinkRE = /^xlink([A-Z])/
 const directiveRE = /^v-/
@@ -160,6 +161,9 @@ const parseAttributeJSXAttribute = (t, path, attributes, tagName, elementType) =
   } else {
     if (name.startsWith(`v-`)) {
       name = name.replace(directiveRE, '')
+      prefix = 'directives'
+    } else if (name.startsWith('v') && name.length >= 2 && name[1] >= 'A' && name[1] <= 'Z') {
+      name = kebabcase(name.substr(1))
       prefix = 'directives'
     }
     if (name.match(xlinkRE)) {

@@ -234,7 +234,7 @@ test('Spread (mixed)', t => {
 test('Custom directives', t => {
   const wrapper = shallow({
     render(h) {
-      return <div v-test={123} v-other={234} />
+      return <div v-test={123} vOther={234} />
     },
   })
 

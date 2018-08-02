@@ -36,7 +36,8 @@
   "dependencies": {
     "@babel/helper-module-imports": "^7.0.0-beta.49",
     "@babel/plugin-syntax-jsx": "^7.0.0-beta.49",
-    "@vuejs/babel-helper-vue-jsx-merge-props": "^0.1.0"
+    "@vuejs/babel-helper-vue-jsx-merge-props": "^0.1.0",
+    "lodash.kebabcase": "^4.1.1"
   },
   "nyc": {
     "exclude": [

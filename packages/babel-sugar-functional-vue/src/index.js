@@ -18,6 +18,26 @@ const isInMethod = (t, path, parentLimitPath) => {
 }
 
 /**
+ * Check path has JSX
+ * @param t
+ * @param path
+ * @returns boolean
+ */
+const hasJSX = (t, path) => {
+  let hasJSX = false
+
+  path.traverse({
+    JSXElement(elPath) {
+      if (!isInMethod(t, elPath, path)) {
+        hasJSX = true
+      }
+    },
+  })
+
+  return hasJSX
+}
+
+/**
  * Check if it's a functional componet declarator
  * @param t
  * @param path
@@ -29,20 +49,26 @@ const isFunctionalComponentDeclarator = (t, path) => {
     return false
   }
 
-  let hasJSX = false
+  return hasJSX(t, path)
+}
 
-  path.traverse({
-    JSXElement(elPath) {
-      if (!isInMethod(t, elPath, path)) {
-        hasJSX = true
-      }
-    },
-  })
-
-  if (!hasJSX) {
-    return false
+/**
+ * Convert arrow function to functional component
+ * @param t
+ * @param path
+ * @param name
+ */
+const convertFunctionalComponent = (t, path, name = null) => {
+  const params = [t.identifier('h'), ...path.node.params]
+  const body = path.node.body
+  const props = [
+    t.objectProperty(t.identifier('functional'), t.booleanLiteral(true)),
+    t.objectProperty(t.identifier('render'), t.arrowFunctionExpression(params, body)),
+  ]
+  if (process.env.NODE_ENV === 'development' && name) {
+    props.unshift(t.objectProperty(t.identifier('name'), t.stringLiteral(name)))
   }
-  return true
+  path.replaceWith(t.objectExpression(props))
 }
 
 export default babel => {
@@ -53,6 +79,13 @@ export default babel => {
     visitor: {
       Program(path) {
         path.traverse({
+          ExportDefaultDeclaration(path) {
+            if (!t.isArrowFunctionExpression(path.node.declaration) || !hasJSX(t, path)) {
+              return
+            }
+
+            convertFunctionalComponent(t, path.get('declaration'))
+          },
           VariableDeclaration(path) {
             if (
               path.node.declarations.length !== 1 ||
@@ -69,20 +102,7 @@ export default babel => {
             }
 
             const name = path.node.declarations[0].id.name
-            const params = [t.identifier('h'), ...path.node.declarations[0].init.params]
-            const body = path.node.declarations[0].init.body
-            const isDevEnv = process.env.NODE_ENV === 'development'
-            const props = [
-              t.objectProperty(t.identifier('functional'), t.booleanLiteral(true)),
-              t.objectProperty(t.identifier('render'), t.arrowFunctionExpression(params, body)),
-            ]
-            if (isDevEnv) {
-              props.unshift(t.objectProperty(t.identifier('name'), t.stringLiteral(name)))
-            }
-            path.replaceWith(
-              t.variableDeclaration('const', [t.variableDeclarator(t.identifier(name), t.objectExpression(props))]),
-              [],
-            )
+            convertFunctionalComponent(t, path.get('declarations')[0].get('init'), name)
           },
         })
       },

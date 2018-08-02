@@ -14,6 +14,7 @@ const cachedCamelCase = (() => {
   }
 })()
 const equalCamel = (string, match) => string === match || string === cachedCamelCase(match)
+const startsWithCamel = (string, match) => string.startsWith(match) || string.startsWith(cachedCamelCase(match))
 
 export default function(babel) {
   const { types: t } = babel
@@ -29,13 +30,11 @@ export default function(babel) {
               return
             }
 
-            const { isVModel, modifiers, valuePath } = parsed
+            const { modifiers, valuePath } = parsed
 
-            if (isVModel) {
-              const parent = path.parentPath
-              transformModel(t, parent, valuePath, modifiers)
-              path.remove()
-            }
+            const parent = path.parentPath
+            transformModel(t, parent, valuePath, modifiers)
+            path.remove()
           },
         })
       },
@@ -48,26 +47,23 @@ export default function(babel) {
  *
  * @param  t
  * @param  path JSXAttribute
- * @returns Object<{ isVModel: boolean, modifiers: Set<string>, valuePath: Path<Expression>}>
+ * @returns null | Object<{ modifiers: Set<string>, valuePath: Path<Expression>}>
  */
 const parseVModel = (t, path) => {
-  if (
-    (t.isJSXNamespacedName(path.get('name')) && !equalCamel(path.get('name.namespace.name').node, 'v-model')) ||
-    !equalCamel(path.get('name.name').node, 'v-model')
-  ) {
+  if (t.isJSXNamespacedName(path.get('name')) || !startsWithCamel(path.get('name.name').node, 'v-model')) {
     return null
   }
-  let modifiers = null
+
   if (!t.isJSXExpressionContainer(path.get('value'))) {
     throw new Error('You have to use JSX Expression inside your v-model')
-  } else if (t.isJSXIdentifier(path.get('name'))) {
-    modifiers = new Set()
-  } else {
-    modifiers = new Set(path.get('name.name.name').node.split('-'))
   }
+
+  const modifiers = path.get('name.name').node.split('_')
+  modifiers.shift()
+
   return {
-    modifiers: modifiers,
-    valuePath: isVModel ? path.get('value.expression') : null,
+    modifiers: new Set(modifiers),
+    valuePath: path.get('value.expression'),
   }
 }
 

@@ -203,9 +203,9 @@ test('input[type="checkbox"] .number modifier', async t => {
     render(h) {
       return (
         <div>
-          <input type="checkbox" vModel:number={this.test} value="1" />
+          <input type="checkbox" vModel_number={this.test} value="1" />
           <input type="checkbox" vModel={this.test} value="2" />
-          <input type="checkbox" vModel:number={this.check} />
+          <input type="checkbox" vModel_number={this.check} />
         </div>
       )
     },
@@ -450,7 +450,7 @@ test('component modifier: .number', async t => {
     render(h) {
       return (
         <div>
-          <MyInput ref="input" vModel:number={this.text} />
+          <MyInput ref="input" vModel_number={this.text} />
         </div>
       )
     },
@@ -473,7 +473,7 @@ test('component modifier: .trim', async t => {
     render(h) {
       return (
         <div>
-          <MyInput ref="input" vModel:trim={this.text} />
+          <MyInput ref="input" vModel_trim={this.text} />
         </div>
       )
     },
@@ -620,7 +620,7 @@ test('input[type="radio"] .number modifier', async t => {
       return (
         <div>
           <input type="radio" value="1" vModel={this.test} name="test" />
-          <input type="radio" value="2" vModel:number={this.test} name="test" />
+          <input type="radio" value="2" vModel_number={this.test} name="test" />
         </div>
       )
     },
@@ -1083,7 +1083,7 @@ test('select .number modifier', async t => {
     }),
     render(h) {
       return (
-        <select vModel:number={this.test}>
+        <select vModel_number={this.test}>
           <option value="1">a</option>
           <option value={2}>b</option>
           <option value={3}>c</option>
@@ -1103,7 +1103,7 @@ test('select should respect different primitive type value', async t => {
     }),
     render(h) {
       return (
-        <select vModel:number={this.test}>
+        <select vModel_number={this.test}>
           <option value="">a</option>
           <option value="0">b</option>
           <option value="1">c</option>
@@ -1274,7 +1274,7 @@ test('input[type="text"] .lazy modifier', async t => {
       test: 'b',
     }),
     render(h) {
-      return <input vModel:lazy={this.test} />
+      return <input vModel_lazy={this.test} />
     },
   })
   t.is(wrapper.element.value, 'b')
@@ -1293,7 +1293,7 @@ test('input[type="text"] .number modifier', async t => {
       test: 1,
     }),
     render(h) {
-      return <input vModel:number={this.test} />
+      return <input vModel_number={this.test} />
     },
   })
   t.is(wrapper.vm.test, 1)
@@ -1312,7 +1312,7 @@ test('input[type="text"] .trim modifier', async t => {
       test: 'hi',
     }),
     render(h) {
-      return <input vModel:trim={this.test} />
+      return <input vModel_trim={this.test} />
     },
   })
   t.is(wrapper.vm.test, 'hi')
@@ -1330,7 +1330,7 @@ test('input[type="text"] .number focus and typing', async t => {
     render(h) {
       return (
         <div>
-          <input ref="input" vModel:number={this.test} />
+          <input ref="input" vModel_number={this.test} />
           {this.update}
           <input ref="blur" />
         </div>
@@ -1356,7 +1356,7 @@ test('input[type="text"] .trim focus and typing', async t => {
     render(h) {
       return (
         <div>
-          <input ref="input" vModel:trim={this.test} type="text" />
+          <input ref="input" vModel_trim={this.test} type="text" />
           {this.update}
           <input ref="blur" />
         </div>
@@ -1405,7 +1405,7 @@ test('input[type="text"] multiple inputs', async t => {
               <div>
                 {inputGroup.data.map((item, index) => (
                   <span>
-                    <input name={item} type="text" vModel:number={this.selections[idx][index]} id={idx + '-' + index} />
+                    <input name={item} type="text" vModel_number={this.selections[idx][index]} id={idx + '-' + index} />
                     <label>{item}</label>
                   </span>
                 ))}

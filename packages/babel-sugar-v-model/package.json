@@ -1,5 +1,5 @@
 {
-  "name": "@vuejs/babel-sugar-v-model",
+  "name": "@vue/babel-sugar-v-model",
   "version": "0.1.0",
   "description": "Babel syntactic sugar for v-model support in Vue JSX",
   "main": "dist/plugin.js",

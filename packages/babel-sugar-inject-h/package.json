@@ -1,5 +1,5 @@
 {
-  "name": "@vuejs/babel-sugar-inject-h",
+  "name": "@vue/babel-sugar-inject-h",
   "version": "0.1.0",
   "description": "Babel syntactic sugar for h automatic injection for Vue JSX",
   "main": "dist/plugin.js",

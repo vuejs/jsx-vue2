@@ -1,5 +1,5 @@
 {
-  "name": "@vuejs/babel-sugar-functional-vue",
+  "name": "@vue/babel-sugar-functional-vue",
   "version": "0.1.0",
   "description": "Babel syntactic sugar for functional components",
   "main": "dist/plugin.js",

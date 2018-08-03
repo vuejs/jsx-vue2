@@ -17,7 +17,7 @@ const equalCamel = (string, match) => string === match || string === cachedCamel
 const startsWithCamel = (string, match) => string.startsWith(match) || string.startsWith(cachedCamelCase(match))
 
 export default function(babel) {
-  const { types: t } = babel
+  const t = babel.types
 
   return {
     inherits: syntaxJsx,

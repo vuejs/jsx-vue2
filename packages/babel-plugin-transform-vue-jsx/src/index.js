@@ -372,7 +372,7 @@ const transformJSXExpressionContainer = (t, path) => path.get('expression').node
 const transformJSXSpreadChild = (t, path) => t.spreadElement(path.get('expression').node)
 
 export default babel => {
-  const { types: t } = babel
+  const t = babel.types
 
   return {
     name: 'babel-plugin-transform-vue-jsx',

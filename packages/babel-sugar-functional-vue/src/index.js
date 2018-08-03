@@ -72,7 +72,7 @@ const convertFunctionalComponent = (t, path, name = null) => {
 }
 
 export default babel => {
-  const { types: t } = babel
+  const t = babel.types
 
   return {
     inherits: syntaxJsx,

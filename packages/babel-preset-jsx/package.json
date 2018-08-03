@@ -1,0 +1,26 @@
+{
+  "name": "@vue/babel-preset-jsx",
+  "version": "0.1.0",
+  "description": "Babel preset for Vue JSX",
+  "main": "dist/plugin.cjs.js",
+  "module": "dist/plugin.js",
+  "repository": "https://github.com/vuejs/jsx/tree/master/packages/babel-sugar-event-modifiers",
+  "author": "Nick Messing <dot.nick.dot.messing@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "rollup -c",
+    "prerelease": "yarn build"
+  },
+  "dependencies": {
+    "@vuejs/babel-helper-vue-jsx-merge-props": "^0.1.0",
+    "@vuejs/babel-plugin-transform-vue-jsx": "^0.1.0",
+    "@vuejs/babel-sugar-functional-vue": "^0.1.0",
+    "@vuejs/babel-sugar-inject-h": "^0.1.0",
+    "@vuejs/babel-sugar-v-model": "^0.1.0"
+  },
+  "devDependencies": {
+    "rollup": "^0.63.5",
+    "rollup-plugin-uglify-es": "^0.0.1"
+  }
+}

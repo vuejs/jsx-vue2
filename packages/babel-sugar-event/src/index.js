@@ -180,12 +180,9 @@ export default function (babel) {
         genModifierCode.push(
           genGuard(
             keyModifiers
-            .filter(keyModifier => !modifiers[keyModifier])
+            .filter(keyModifier => !modifiers.includes(keyModifier))
             .map(keyModifier => genEventExpression(keyModifier + 'Key'))
-            .reduce((acc, item) => {
-              if (acc) return or(acc, item)
-              return acc
-            }),
+            .reduce((acc, item) => acc ? or(acc, item) : item),
           ),
         )
       } else {
@@ -201,7 +198,7 @@ export default function (babel) {
       code.concat(genModifierCode)
     }
 
-    code.concat(
+    code.push(
       t.returnStatement(genCallExpression(expression, [t.identifier('$event')]))
     )
 

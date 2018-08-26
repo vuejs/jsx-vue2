@@ -3,7 +3,6 @@ import { addDefault } from '@babel/helper-module-imports'
 import kebabcase from 'lodash.kebabcase'
 
 const xlinkRE = /^xlink([A-Z])/
-const directiveRE = /^v-/
 const rootAttributes = ['class', 'style', 'key', 'ref', 'refInFor', 'slot', 'scopedSlots', 'model']
 const prefixes = ['props', 'domProps', 'on', 'nativeOn', 'hook', 'attrs']
 const domPropsValueElements = ['input', 'textarea', 'option', 'select']
@@ -92,7 +91,22 @@ const getChildren = (t, paths) =>
  */
 const addAttribute = (t, attributes, type, value) => {
   if (attributes[type]) {
-    attributes[type].properties.push(value)
+    let exists = false
+    if (t.isObjectProperty(value) && (type === 'on' || type === 'nativeOn')) {
+      attributes[type].properties.forEach(property => {
+        if (t.isObjectProperty(property) && property.key.value === value.key.value) {
+          if (t.isArrayExpression(property.value)) {
+            property.value.elements.push(value.value)
+          } else {
+            property.value = t.arrayExpression([property.value, value.value])
+          }
+          exists = true
+        }
+      })
+    }
+    if (!exists) {
+      attributes[type].properties.push(value)
+    }
   } else {
     attributes[type] = t.objectExpression([value])
   }
@@ -317,7 +331,7 @@ const transformJSXElement = (t, path) => {
   const args = [tag]
   if (attributes) {
     if (t.isArrayExpression(attributes)) {
-      const helper = addDefault(path, '@vuejs/babel-helper-vue-jsx-merge-props', { nameHint: '_mergeJSXProps' })
+      const helper = addDefault(path, '@vue/babel-helper-vue-jsx-merge-props', { nameHint: '_mergeJSXProps' })
       args.push(t.callExpression(helper, [attributes]))
     } else {
       args.push(attributes)

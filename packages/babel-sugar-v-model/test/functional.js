@@ -1,10 +1,9 @@
-import _mergeJSXProps from '@vuejs/babel-helper-vue-jsx-merge-props'
+import 'jsdom-global/register'
 import test from 'ava'
-require('jsdom-global')()
-const { shallow, mount } = require('vue-test-utils')
+import { shallowMount } from '@vue/test-utils'
 
 test('input[type="checkbox"] should work', async t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     data: () => ({
       test: true,
     }),
@@ -23,7 +22,7 @@ test('input[type="checkbox"] should work', async t => {
 })
 
 test('input[type="checkbox"] should respect value bindings', async t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     data: () => ({
       test: 1,
       a: 1,
@@ -50,7 +49,7 @@ test('input[type="checkbox"] should respect value bindings', async t => {
 })
 
 test('input[type="checkbox"] bind to Array value', async t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     data: () => ({
       test: ['1'],
     }),
@@ -79,7 +78,7 @@ test('input[type="checkbox"] bind to Array value', async t => {
 })
 
 test('input[type="checkbox"] bind to Array value ignores false-value', async t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     data: () => ({
       test: ['1'],
     }),
@@ -108,7 +107,7 @@ test('input[type="checkbox"] bind to Array value ignores false-value', async t =
 })
 
 test('input[type="checkbox"] bind to Array value with value bindings', async t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     data: () => ({
       test: [1],
     }),
@@ -137,7 +136,7 @@ test('input[type="checkbox"] bind to Array value with value bindings', async t =
 })
 
 test('input[type="checkbox"] bind to Array value with value bindings (object loose equal)', async t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     data: () => ({
       test: [{ a: 1 }],
     }),
@@ -166,7 +165,7 @@ test('input[type="checkbox"] bind to Array value with value bindings (object loo
 })
 
 test('input[type="checkbox"] bind to Array value with array value bindings (object loose equal)', async t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     data: () => ({
       test: [{ a: 1 }],
     }),
@@ -195,7 +194,7 @@ test('input[type="checkbox"] bind to Array value with array value bindings (obje
 })
 
 test('input[type="checkbox"] .number modifier', async t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     data: () => ({
       test: [],
       check: true,
@@ -223,7 +222,7 @@ test('input[type="checkbox"] .number modifier', async t => {
 })
 
 test('input[type="checkbox"] should respect different primitive type value', async t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     data: () => ({
       test: [0],
     }),
@@ -282,38 +281,8 @@ test('input[type="checkbox"] should respect different primitive type value', asy
   t.is(checkboxInput[4].checked, true)
 })
 
-// #4521
-test('input[type="checkbox"] should work with click event', async t => {
-  const wrapper = shallow({
-    data: () => ({
-      num: 1,
-      checked: false,
-    }),
-    render(h) {
-      return (
-        <div onClick={this.add}>
-          click {this.num}
-          <input ref="checkbox" type="checkbox" vModel={this.checked} />
-        </div>
-      )
-    },
-    methods: {
-      add: function() {
-        this.num++
-      },
-    },
-  })
-
-  const checkbox = wrapper.vm.$refs.checkbox
-  checkbox.click()
-
-  await wrapper.vm.$nextTick()
-  t.is(checkbox.checked, true)
-  t.is(wrapper.vm.num, 2)
-})
-
 test('input[type="checkbox"] should get updated with model when in focus', async t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     data: () => ({
       a: 2,
     }),
@@ -332,7 +301,7 @@ test('input[type="checkbox"] should get updated with model when in focus', async
 })
 
 test('input[type="checkbox"] triggers a watcher when binding to an array value in a checkbox', async t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     data: () => ({
       test: {
         thing: false,
@@ -367,7 +336,7 @@ test('component should work', async t => {
       },
     },
   }
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       msg: 'hello',
     }),
@@ -408,7 +377,7 @@ test('component should support customization via model option', async t => {
       return <input value={this.currentValue} onInput={$event => this.$emit('update', $event.target.value)} />
     },
   }
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       msg: 'hello',
     }),
@@ -446,7 +415,7 @@ test('component modifier: .number', async t => {
       return <input />
     },
   }
-  const wrapper = mount({
+  const wrapper = shallowMount({
     render(h) {
       return (
         <div>
@@ -469,7 +438,7 @@ test('component modifier: .trim', async t => {
       return <input />
     },
   }
-  const wrapper = mount({
+  const wrapper = shallowMount({
     render(h) {
       return (
         <div>
@@ -487,7 +456,7 @@ test('component modifier: .trim', async t => {
 })
 
 test('input[type="radio"] should work', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: '1',
     }),
@@ -514,7 +483,7 @@ test('input[type="radio"] should work', async t => {
 })
 
 test('input[type="radio"] should respect value bindings', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: 1,
     }),
@@ -541,7 +510,7 @@ test('input[type="radio"] should respect value bindings', async t => {
 })
 
 test('input[type="radio"] should respect value bindings (object loose equal)', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: { a: 1 },
     }),
@@ -570,7 +539,7 @@ test('input[type="radio"] should respect value bindings (object loose equal)', a
 test('input[type="radio"] multiple radios', async t => {
   let called = false
   const spy = () => (called = true)
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       selections: ['a', '1'],
       radioList: [
@@ -612,7 +581,7 @@ test('input[type="radio"] multiple radios', async t => {
 })
 
 test('input[type="radio"] .number modifier', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: 1,
     }),
@@ -635,7 +604,7 @@ test('input[type="radio"] .number modifier', async t => {
 })
 
 test('input[type="radio"] should respect different primitive type value', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: 1,
     }),
@@ -689,7 +658,7 @@ test('input[type="radio"] should respect different primitive type value', async 
 
 // #4521
 test('input[type="radio"] should work with click event', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       num: 1,
       checked: 1,
@@ -729,7 +698,7 @@ test('input[type="radio"] should work with click event', async t => {
 })
 
 test('input[type="radio"] should get updated with model when in focus', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       a: '2',
     }),
@@ -747,7 +716,7 @@ test('input[type="radio"] should get updated with model when in focus', async t 
 })
 
 test('select should work', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: 'b',
     }),
@@ -775,7 +744,7 @@ test('select should work', async t => {
 })
 
 test('select should work with value bindings', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: 2,
     }),
@@ -807,7 +776,7 @@ test('select should work with value bindings', async t => {
 })
 
 test('select should work with value bindings (object loose equal)', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: { a: 2 },
     }),
@@ -837,7 +806,7 @@ test('select should work with value bindings (object loose equal)', async t => {
 })
 
 test('select should work with value bindings (Array loose equal)', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: [{ a: 2 }],
     }),
@@ -866,13 +835,19 @@ test('select should work with value bindings (Array loose equal)', async t => {
 })
 
 test('select should work with v-for', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: 'b',
       opts: ['a', 'b', 'c'],
     }),
     render(h) {
-      return <select vModel={this.test}>{this.opts.map(o => <option>{o}</option>)}</select>
+      return (
+        <select vModel={this.test}>
+          {this.opts.map(o => (
+            <option>{o}</option>
+          ))}
+        </select>
+      )
     },
   })
   t.is(wrapper.vm.test, 'b')
@@ -893,13 +868,19 @@ test('select should work with v-for', async t => {
 })
 
 test('select should work with v-for & value bindings', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: 2,
       opts: [1, 2, 3],
     }),
     render(h) {
-      return <select vModel={this.test}>{this.opts.map(o => <option value={o}>option {o}</option>)}</select>
+      return (
+        <select vModel={this.test}>
+          {this.opts.map(o => (
+            <option value={o}>option {o}</option>
+          ))}
+        </select>
+      )
     },
   })
   t.is(wrapper.element.value, '2')
@@ -921,7 +902,7 @@ test('select should work with v-for & value bindings', async t => {
 test('select should work with select which has no default selected options', async t => {
   let calls = 0
   const spy = () => ++calls
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       id: 4,
       list: [1, 2, 3],
@@ -931,7 +912,9 @@ test('select should work with select which has no default selected options', asy
       return (
         <div>
           <select onChange={this.test} vModel={this.id}>
-            {this.list.map(item => <option value={item}>{item}</option>)}
+            {this.list.map(item => (
+              <option value={item}>{item}</option>
+            ))}
           </select>
           {this.testChange}
         </div>
@@ -947,7 +930,7 @@ test('select should work with select which has no default selected options', asy
 })
 
 test('select multiple', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: ['b'],
     }),
@@ -977,7 +960,7 @@ test('select multiple', async t => {
 })
 
 test('select multiple + v-for', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: ['b'],
       opts: ['a', 'b', 'c'],
@@ -985,7 +968,9 @@ test('select multiple + v-for', async t => {
     render(h) {
       return (
         <select vModel={this.test} multiple>
-          {this.opts.map(o => <option>{o}</option>)}
+          {this.opts.map(o => (
+            <option>{o}</option>
+          ))}
         </select>
       )
     },
@@ -1014,7 +999,7 @@ test('select multiple + v-for', async t => {
 test('select should work with multiple binding', async t => {
   let called = false
   const spy = () => (called = true)
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       isMultiple: true,
       selections: ['1'],
@@ -1042,7 +1027,7 @@ test('select should work with multiple binding', async t => {
 test('select multiple selects', async t => {
   let called = false
   const spy = () => (called = true)
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       selections: ['', ''],
       selectBoxes: [
@@ -1058,7 +1043,9 @@ test('select multiple selects', async t => {
         <div>
           {this.selectBoxes.map((item, index) => (
             <select vModel={this.selections[index]}>
-              {item.map(element => <option value={element.value}>{element.text}</option>)}
+              {item.map(element => (
+                <option value={element.value}>{element.text}</option>
+              ))}
             </select>
           ))}
           <span ref="rs">{this.selections}</span>
@@ -1077,7 +1064,7 @@ test('select multiple selects', async t => {
 })
 
 test('select .number modifier', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: 2,
     }),
@@ -1097,7 +1084,7 @@ test('select .number modifier', async t => {
 })
 
 test('select should respect different primitive type value', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: 0,
     }),
@@ -1153,7 +1140,7 @@ test('select should work with option value that has circular reference', async t
   const circular = {}
   circular.self = circular
 
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: 'b',
       circular,
@@ -1178,7 +1165,7 @@ test('select should work with option value that has circular reference', async t
 
 // #6112
 test('select should not set non-matching value to undefined if options did not change', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: '1',
     }),
@@ -1200,7 +1187,7 @@ test('select should not set non-matching value to undefined if options did not c
 test('select should not trigger change event when matching option can be found for each value', async t => {
   let called = false
   const spy = () => (called = true)
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       options: ['1'],
     }),
@@ -1233,7 +1220,7 @@ test('select should not trigger change event when matching option can be found f
 })
 
 test('textarea should update value both ways', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: 'b',
     }),
@@ -1251,7 +1238,7 @@ test('textarea should update value both ways', async t => {
 })
 
 test('input[type="text"] should update value both ways', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: 'b',
     }),
@@ -1269,7 +1256,7 @@ test('input[type="text"] should update value both ways', async t => {
 })
 
 test('input[type="text"] .lazy modifier', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: 'b',
     }),
@@ -1288,7 +1275,7 @@ test('input[type="text"] .lazy modifier', async t => {
 })
 
 test('input[type="text"] .number modifier', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: 1,
     }),
@@ -1307,7 +1294,7 @@ test('input[type="text"] .number modifier', async t => {
 })
 
 test('input[type="text"] .trim modifier', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: 'hi',
     }),
@@ -1322,17 +1309,14 @@ test('input[type="text"] .trim modifier', async t => {
 })
 
 test('input[type="text"] .number focus and typing', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: 0,
-      update: 0,
     }),
     render(h) {
       return (
         <div>
           <input ref="input" vModel_number={this.test} />
-          {this.update}
-          <input ref="blur" />
         </div>
       )
     },
@@ -1342,13 +1326,10 @@ test('input[type="text"] .number focus and typing', async t => {
   wrapper.vm.$refs.input.value = '1.0'
   wrapper.find('input').trigger('input')
   t.is(wrapper.vm.test, 1)
-  wrapper.vm.update++
-  await wrapper.vm.$nextTick()
-  t.is(wrapper.vm.$refs.input.value, '1')
 })
 
 test('input[type="text"] .trim focus and typing', async t => {
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       test: 'abc',
       update: 0,
@@ -1380,7 +1361,7 @@ test('input[type="text"] .trim focus and typing', async t => {
 test('input[type="text"] multiple inputs', async t => {
   let called = false
   const spy = () => (called = true)
-  const wrapper = mount({
+  const wrapper = shallowMount({
     data: () => ({
       selections: [[1, 2, 3], [4, 5]],
       inputList: [

@@ -214,19 +214,19 @@ const tests = [
   }} />
 </div>);`,
   },
+  {
+    name: 'Rightclick',
+    from: `render(h => <div v-on:click_right={foo}>test</div>)`,
+    to: `render(h => <div on-contextmenu={foo}>test</div>);`,
+  },
+  {
+    name: 'Middle click',
+    from: `render(h => <div v-on:click_middle={foo}>test</div>)`,
+    to: `render(h => <div on-mouseup={$event => {
+  if ("button" in $event && $event.button !== 1) return null;
+  return foo($event);
+}}>test</div>);`,
+  },
 ]
 
 tests.forEach(({ name, from, to }) => test(name, async t => t.is(await transpile(from), to)))
-
-// test('JSXElement attribute value throws error', t =>
-//   new Promise(resolve => {
-//     transpile(`render(h => <a key=<b/> />)`)
-//       .then(() => {
-//         t.fail()
-//         resolve()
-//       })
-//       .catch(e => {
-//         t.is(e.message, 'getAttributes (attribute value): JSXElement is not supported')
-//         resolve()
-//       })
-//   }))

@@ -200,13 +200,13 @@ const vnode = render(h => h("div", {
   {
     name: 'Only spread attributes',
     from: `render(h => <div {...spread} />)`,
-    to: `import _mergeJSXProps from "@vuejs/babel-helper-vue-jsx-merge-props";
+    to: `import _mergeJSXProps from "@vue/babel-helper-vue-jsx-merge-props";
 render(h => h("div", _mergeJSXProps([{}, spread])));`,
   },
   {
     name: 'Generic spread attributes',
     from: `render(h => <div {...spread} hello="world" />)`,
-    to: `import _mergeJSXProps from "@vuejs/babel-helper-vue-jsx-merge-props";
+    to: `import _mergeJSXProps from "@vue/babel-helper-vue-jsx-merge-props";
 render(h => h("div", _mergeJSXProps([{}, spread, {
   "attrs": {
     "hello": "world"
@@ -282,6 +282,15 @@ render(h => h("div", _mergeJSXProps([{}, spread, {
     to: `h("video", {
   "domProps": {
     "muted": val
+  }
+});`,
+  },
+  {
+    name: 'Multiple event listeners',
+    from: `<div onClick={listner1} onClick={listner2} onClick={listner3} />`,
+    to: `h("div", {
+  "on": {
+    "click": [listner1, listner2, listner3]
   }
 });`,
   },

@@ -1,11 +1,12 @@
+import 'jsdom-global/register'
 import test from 'ava'
-require('jsdom-global')()
-const { shallow } = require('vue-test-utils')
+import { shallowMount } from '@vue/test-utils'
+import Vue from 'vue'
 
 const it = () => {}
 
 test('Contains text', t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return <div>test</div>
     },
@@ -17,7 +18,7 @@ test('Contains text', t => {
 
 test('Binds text', t => {
   const text = 'foo'
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return <div>{text}</div>
     },
@@ -28,7 +29,7 @@ test('Binds text', t => {
 })
 
 test('Extracts attrs', t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return <div id="hi" dir="ltr" />
     },
@@ -40,7 +41,7 @@ test('Extracts attrs', t => {
 
 test('Binds attrs', t => {
   const id = 'foo'
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return <div id={id} />
     },
@@ -50,7 +51,7 @@ test('Binds attrs', t => {
 })
 
 test('Omits attrs if possible', t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return <div>test</div>
     },
@@ -60,7 +61,7 @@ test('Omits attrs if possible', t => {
 })
 
 test('Omits children if possible', t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return <div />
     },
@@ -70,7 +71,7 @@ test('Omits children if possible', t => {
 })
 
 test('Handles top-level special attrs', t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return <div class="foo" style="bar" key="key" ref="ref" refInFor slot="slot" />
     },
@@ -85,7 +86,7 @@ test('Handles top-level special attrs', t => {
 
 test('Handles nested properties', t => {
   const noop = _ => _
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return (
         <div
@@ -107,7 +108,7 @@ test('Handles nested properties', t => {
 
 test('Handles nested properties (camelCase)', t => {
   const noop = _ => _
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return (
         <div propsOnSuccess={noop} onClick={noop} onCamelCase={noop} domPropsInnerHTML="<p>hi</p>" hookInsert={noop} />
@@ -122,7 +123,7 @@ test('Handles nested properties (camelCase)', t => {
 })
 
 test('Supports data attribute', t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return <div data-id="1" />
     },
@@ -132,8 +133,8 @@ test('Supports data attribute', t => {
 })
 
 test('Handles identifier tag name as components', t => {
-  const Test = {}
-  const wrapper = shallow({
+  const Test = { render: () => null }
+  const wrapper = shallowMount({
     render(h) {
       return <Test />
     },
@@ -143,8 +144,12 @@ test('Handles identifier tag name as components', t => {
 })
 
 test('Works for components with children', t => {
-  const Test = {}
-  const wrapper = shallow({
+  const Test = {
+    render(h) {
+      h('div')
+    },
+  }
+  const wrapper = shallowMount({
     render(h) {
       return (
         <Test>
@@ -164,7 +169,7 @@ test('Binds things in thunk with correct this context', t => {
       return <div>{this.$slots.default}</div>
     },
   }
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     data: () => ({ test: 'foo' }),
     render(h) {
       return <Test>{this.test}</Test>
@@ -178,7 +183,7 @@ test('Spread (single object expression)', t => {
   const props = {
     innerHTML: 2,
   }
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return <div {...{ props }} />
     },
@@ -208,7 +213,7 @@ test('Spread (mixed)', t => {
     },
     class: ['a', 'b'],
   }
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return (
         <div
@@ -232,19 +237,25 @@ test('Spread (mixed)', t => {
 })
 
 test('Custom directives', t => {
-  const wrapper = shallow({
+  const directive = {
+    inserted() {},
+  }
+  Vue.directive('test', directive)
+  Vue.directive('other', directive)
+
+  const wrapper = shallowMount({
     render(h) {
       return <div v-test={123} vOther={234} />
     },
   })
 
   t.is(wrapper.vnode.data.directives.length, 2)
-  t.deepEqual(wrapper.vnode.data.directives[0], { def: undefined, modifiers: {}, name: 'test', value: 123 })
-  t.deepEqual(wrapper.vnode.data.directives[1], { def: undefined, modifiers: {}, name: 'other', value: 234 })
+  t.deepEqual(wrapper.vnode.data.directives[0], { def: directive, modifiers: {}, name: 'test', value: 123 })
+  t.deepEqual(wrapper.vnode.data.directives[1], { def: directive, modifiers: {}, name: 'other', value: 234 })
 })
 
 test('xlink:href', t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return <use xlinkHref={'#name'} />
     },
@@ -254,7 +265,7 @@ test('xlink:href', t => {
 })
 
 test('Merge class', t => {
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return <div class="a" {...{ class: 'b' }} />
     },
@@ -273,7 +284,7 @@ test('JSXMemberExpression', t => {
       },
     },
   }
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return <a.b.cmp />
     },
@@ -284,7 +295,7 @@ test('JSXMemberExpression', t => {
 
 test('JSXSpreadChild', t => {
   const a = ['1', '2']
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return <div>{...a}</div>
     },
@@ -295,7 +306,7 @@ test('JSXSpreadChild', t => {
 
 test('domProps input[value]', t => {
   const val = 'foo'
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return <input type="text" value={val} />
     },
@@ -307,7 +318,7 @@ test('domProps input[value]', t => {
 
 test('domProps option[selected]', t => {
   const val = 'foo'
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return <option selected={val} />
     },
@@ -318,7 +329,7 @@ test('domProps option[selected]', t => {
 
 test('domProps input[checked]', t => {
   const val = 'foo'
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return <input checked={val} />
     },
@@ -329,7 +340,7 @@ test('domProps input[checked]', t => {
 
 test('domProps video[muted]', t => {
   const val = 'foo'
-  const wrapper = shallow({
+  const wrapper = shallowMount({
     render(h) {
       return <video muted={val} />
     },

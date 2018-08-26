@@ -1,8 +1,8 @@
-import uglify from 'rollup-plugin-uglify-es'
+import minify from 'rollup-plugin-babel-minify'
 
 export default {
   input: 'src/index.js',
-  plugins: [uglify()],
+  plugins: [minify({ comments: false })],
   output: [
     {
       file: 'dist/plugin.cjs.js',

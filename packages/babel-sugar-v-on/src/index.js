@@ -142,6 +142,13 @@ export default function(babel) {
    */
   function genHandler(handlerPath) {
     let { modifiers, isInvalid, expression, event } = parse(handlerPath)
+    if (event === 'click' && modifiers.includes('right')) {
+      modifiers = modifiers.filter(modifier => modifier !== 'right')
+      event = 'contextmenu'
+    }
+    if (event === 'click' && modifiers.includes('middle')) {
+      event = 'mouseup'
+    }
     let isNative = false
 
     if (isInvalid) return

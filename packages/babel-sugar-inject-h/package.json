@@ -15,23 +15,19 @@
     "test": "nyc --reporter=html --reporter=text-summary ava -v test/test.js"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.49",
-    "@babel/core": "^7.0.0-beta.49",
-    "@babel/preset-env": "^7.0.0-beta.49",
+    "@babel/cli": "^7.0.0-rc.3",
+    "@babel/core": "^7.0.0-rc.3",
+    "@babel/preset-env": "^7.0.0-rc.3",
     "ava": "^0.25.0",
-    "jsdom": "^11.11.0",
-    "jsdom-global": "^3.0.2",
-    "nyc": "^11.8.0",
-    "rollup": "^0.59.4",
-    "rollup-plugin-babel": "beta",
+    "nyc": "^12.0.2",
+    "rollup": "^0.65.0",
+    "rollup-plugin-babel": "4.0.0-beta.8",
     "rollup-plugin-istanbul": "^2.0.1",
     "rollup-plugin-uglify-es": "^0.0.1",
-    "vue": "^2.5.16",
-    "vue-template-compiler": "^2.5.16",
-    "vue-test-utils": "^1.0.0-beta.11"
+    "vue": "^2.5.17"
   },
   "dependencies": {
-    "@babel/plugin-syntax-jsx": "^7.0.0-beta.49"
+    "@babel/plugin-syntax-jsx": "^7.0.0-rc.3"
   },
   "nyc": {
     "exclude": [

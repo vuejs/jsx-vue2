@@ -12,7 +12,7 @@ const cachedCamelCase = (() => {
   }
 })()
 const equalCamel = (string, match) => string === match || string === cachedCamelCase(match)
-const startsWithCamel = (string, match) => string.startsWith(match) || string.startsWith(cachedCamelCase(match))
+
 const keyModifiers = ['ctrl', 'shift', 'alt', 'meta']
 const keyCodes = {
   esc: 27,
@@ -40,19 +40,15 @@ const keyNames = {
   delete: ['Backspace', 'Delete'],
 }
 
-export default function (babel) {
+export default function(babel) {
   const t = babel.types
 
   function genGuard(expression) {
-    return t.ifStatement(expression, t.returnStatement(t.nullStatement()))
+    return t.ifStatement(expression, t.returnStatement(t.nullLiteral()))
   }
 
   function genCallExpression(expression, args = []) {
     return t.callExpression(expression, args)
-  }
-
-  function genCallExpressionWithEvent(expression) {
-    return genCallExpression(expression, [t.identifier('$event')])
   }
 
   function genEventExpression(name) {
@@ -60,23 +56,23 @@ export default function (babel) {
   }
 
   function not(expression) {
-    return t.unaryStatement('!', expression)
+    return t.unaryExpression('!', expression)
   }
 
   function notEq(left, right) {
-    return t.binaryStatement(left, '!==', right)
+    return t.binaryExpression('!==', left, right)
   }
 
   function and(left, right) {
-    return t.binaryStatement(left, '&&', right)
+    return t.logicalExpression('&&', left, right)
   }
 
-  function and(left, right) {
-    return t.binaryStatement(left, '||', right)
+  function or(left, right) {
+    return t.logicalExpression('||', left, right)
   }
 
   function hasButton() {
-    return t.binaryStatement(t.stringLiteral('button'), 'in', t.identifier('$event'))
+    return t.binaryExpression('in', t.stringLiteral('button'), t.identifier('$event'))
   }
 
   const modifierCode = {
@@ -95,15 +91,15 @@ export default function (babel) {
     // meta: genGuard(`!$event.metaKey`),
     meta: () => genGuard(not(genEventExpression('metaKey'))),
     // left: genGuard(`'button' in $event && $event.button !== 0`),
-    left: () => genGuard(and(hasButton(), notEq(genEventExpression('button'), t.numberLiteral(0)))),
+    left: () => genGuard(and(hasButton(), notEq(genEventExpression('button'), t.numericLiteral(0)))),
     // middle: genGuard(`'button' in $event && $event.button !== 1`),
-    middle: () => genGuard(and(hasButton(), notEq(genEventExpression('button'), t.numberLiteral(1)))),
+    middle: () => genGuard(and(hasButton(), notEq(genEventExpression('button'), t.numericLiteral(1)))),
     // right: genGuard(`'button' in $event && $event.button !== 2`)
-    right: () => genGuard(and(hasButton(), notEq(genEventExpression('button'), t.numberLiteral(2)))),
+    right: () => genGuard(and(hasButton(), notEq(genEventExpression('button'), t.numericLiteral(2)))),
   }
 
   function genHandlerFunction(body) {
-    return t.functionExpression([t.identifier('$event')], t.blockStatement(body instanceof Array ? body : [body]))
+    return t.arrowFunctionExpression([t.identifier('$event')], t.blockStatement(body instanceof Array ? body : [body]))
   }
 
   /**
@@ -111,20 +107,20 @@ export default function (babel) {
    */
   function parse(handlerPath) {
     const namePath = handlerPath.get('name')
-    let name = t.isJSXNamespacedName(namePath) ?
-      `${namePath.get('namespace.name').node}:${namePath.get('name.name').node}` :
-      namePath.get('name').node
+    let name = t.isJSXNamespacedName(namePath)
+      ? `${namePath.get('namespace.name').node}:${namePath.get('name.name').node}`
+      : namePath.get('name').node
 
     const normalizedName = camelCase(name)
 
     let modifiers
-    let argument;
-    [name, ...modifiers] = name.split('_');
-    [name, argument] = name.split(':')
+    let argument
+    ;[name, ...modifiers] = name.split('_')
+    ;[name, argument] = name.split(':')
 
     if (!equalCamel(name, 'v-on') || !argument) {
       return {
-        isInvalid: false
+        isInvalid: false,
       }
     }
 
@@ -145,23 +141,16 @@ export default function (babel) {
    * @param {Path<JSXAttribute>} handlerPath
    */
   function genHandler(handlerPath) {
-    const {
-      modifiers,
-      isInvalid,
-      expression,
-      event
-    } = parse(handlerPath)
+    let { modifiers, isInvalid, expression, event } = parse(handlerPath)
+    let isNative = false
 
     if (isInvalid) return
 
-    const isFunctionExpression = t.isArrowFunctionExpression(expression) || t.isFunctionExpression(expression)
-
-    if (!isFunctionExpression) throw new Error('Only function expression is supported with v-on.')
-
-    if (!modifiers) {
+    if (!modifiers || modifiers.length === 0) {
       return {
         event,
-        expression
+        expression,
+        isNative,
       }
     }
 
@@ -171,8 +160,10 @@ export default function (babel) {
 
     for (const key of modifiers) {
       if (modifierCode[key]) {
-        genModifierCode.push(modifierCode[key]())
-
+        const modifierStatement = modifierCode[key]()
+        genModifierCode.push(
+          t.isExpression(modifierStatement) ? t.expressionStatement(modifierStatement) : modifierStatement,
+        )
         if (keyCodes[key]) {
           keys.push(key)
         }
@@ -180,11 +171,17 @@ export default function (babel) {
         genModifierCode.push(
           genGuard(
             keyModifiers
-            .filter(keyModifier => !modifiers.includes(keyModifier))
-            .map(keyModifier => genEventExpression(keyModifier + 'Key'))
-            .reduce((acc, item) => acc ? or(acc, item) : item),
+              .filter(keyModifier => !modifiers.includes(keyModifier))
+              .map(keyModifier => genEventExpression(keyModifier + 'Key'))
+              .reduce((acc, item) => (acc ? or(acc, item) : item)),
           ),
         )
+      } else if (key === 'capture') {
+        event = '!' + event
+      } else if (key === 'once') {
+        event = '~' + event
+      } else if (key === 'native') {
+        isNative = true
       } else {
         keys.push(key)
       }
@@ -195,16 +192,23 @@ export default function (babel) {
     }
 
     if (genModifierCode.length) {
-      code.concat(genModifierCode)
+      code.push(...genModifierCode)
     }
 
-    code.push(
-      t.returnStatement(genCallExpression(expression, [t.identifier('$event')]))
-    )
+    if (code.length === 0) {
+      return {
+        event,
+        expression,
+        isNative,
+      }
+    }
+
+    code.push(t.returnStatement(genCallExpression(expression, [t.identifier('$event')])))
 
     return {
       event,
-      expression: genHandlerFunction(code)
+      expression: genHandlerFunction(code),
+      isNative,
     }
   }
 
@@ -216,7 +220,7 @@ export default function (babel) {
     const keyVal = parseInt(key, 10)
 
     if (keyVal) {
-      return notEq(genEventExpression('keyCode'), t.numberLiteral(keyVal))
+      return notEq(genEventExpression('keyCode'), t.numericLiteral(keyVal))
     }
 
     const keyCode = keyCodes[key]
@@ -225,10 +229,40 @@ export default function (babel) {
     return t.callExpression(t.memberExpression(t.thisExpression(), t.identifier('_k')), [
       genEventExpression('keyCode'),
       t.stringLiteral(`${key}`),
-      t.stringLiteral(`${keyCode}`),
+      keyCode
+        ? Array.isArray(keyCode)
+          ? t.arrayExpression(keyCode.map(number => t.numericLiteral(number)))
+          : t.numericLiteral(keyCode)
+        : t.identifier('undefined'),
       genEventExpression('key'),
-      t.stringLiteral(`${keyName}`),
+      keyName
+        ? Array.isArray(keyName)
+          ? t.arrayExpression(keyName.map(number => t.stringLiteral(number)))
+          : t.stringLiteral(`${keyName}`)
+        : t.identifier('undefined'),
     ])
+  }
+
+  function addEvent(event, expression, isNative, attributes) {
+    if (event[0] !== '~' && event[0] !== '!') {
+      attributes.push(
+        t.jSXAttribute(
+          t.jSXIdentifier(`${isNative ? 'nativeOn' : 'on'}-${event}`),
+          t.jSXExpressionContainer(expression),
+        ),
+      )
+    } else {
+      attributes.push(
+        t.jSXSpreadAttribute(
+          t.objectExpression([
+            t.objectProperty(
+              t.identifier('on'),
+              t.objectExpression([t.objectProperty(t.stringLiteral(event), expression)]),
+            ),
+          ]),
+        ),
+      )
+    }
   }
 
   return {
@@ -237,24 +271,12 @@ export default function (babel) {
       Program(path) {
         path.traverse({
           JSXAttribute(path) {
-            const {
-              event,
-              expression
-            } = genHandler(path)
+            const { event, expression, isNative } = genHandler(path)
 
             if (event) {
               path.remove()
-              const tag = path.parentPath.get('name.name')
-              const isNative = tag[0] < 'A' || 'Z' < tag[1]
 
-              path.parentPath.node.attributes.push(
-                t.jSXAttribute(
-                  t.jSXNamespacedName(
-                    t.jSXIdentifier(isNative ? 'v-native-on' : 'v-on'), t.jSXIdentifier(event)
-                  ),
-                  t.jSXExpressionContainer(expression)
-                )
-              )
+              addEvent(event, expression, isNative, path.parentPath.node.attributes)
             }
           },
         })

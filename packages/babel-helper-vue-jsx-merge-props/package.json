@@ -25,6 +25,9 @@
     "rollup-plugin-istanbul": "^2.0.1"
   },
   "nyc": {
-    "exclude": ["dist", "test"]
+    "exclude": [
+      "dist",
+      "test"
+    ]
   }
 }

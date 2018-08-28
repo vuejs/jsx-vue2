@@ -1,24 +1,16 @@
-## JSX
+# Babel Preset JSX
 
-A monorepo containing all jsx-related packages for Vue.js.
+Configurable Babel preset to add Vue JSX support. See the [configuration options here](https://github.com/vuejs/jsx/tree/docs/init/packages/babel-preset-jsx).
 
-### Babel Compatibility Notes
+## Installation
 
-- This repo is only compatible with Babel 7.x, for 6.x please use [vuejs/babel-plugin-transform-vue-jsx](https://github.com/vuejs/babel-plugin-transform-vue-jsx)
+Install the preset with:
 
-### Details
-
-For normal usage it is recommended to use the default preset.
-To do that you need to first install the preset and the helper:
-
-```sh
-# for yarn:
-yarn add @vue/babel-preset-jsx @vue/babel-helper-vue-jsx-merge-props
-# for npm:
-npm install @vue/babel-preset-jsx @vue/babel-helper-vue-jsx-merge-props --save
+```bash
+npm install @vue/babel-preset-jsx @vue/babel-helper-vue-jsx-merge-props
 ```
 
-In your `.babelrc`:
+Then add the preset to `.babelrc`:
 
 ```json
 {
@@ -26,11 +18,117 @@ In your `.babelrc`:
 }
 ```
 
-For more details please check each package's README:
+## Syntax
 
-- [@vue/babel-helper-vue-jsx-merge-props](packages/babel-helper-vue-jsx-merge-props/README.md) - Runtime helper for props merging
-- [@vue/babel-plugin-transform-vue-jsx](packages/babel-plugin-transform-vue-jsx/README.md) - Main JSX transform plugin
-- [@vue/babel-preset-jsx](packages/babel-preset-jsx/README.md) - Configurable babel preset
-- [@vue/babel-sugar-functional-vue](packages/babel-sugar-functional-vue/README.md) - Functional components syntactic sugar
-- [@vue/babel-sugar-inject-h](packages/babel-sugar-inject-h/README.md) - Automatic `h` injection syntactic sugar
-- [@vue/babel-sugar-v-model](packages/babel-sugar-v-model/README.md) - `vModel` syntactic sugar
+### Content
+
+```jsx
+render() {
+  return <p>hello</p>
+}
+```
+
+with dynamic content:
+
+```jsx
+render() {
+  return <p>hello { this.message }</p>
+}
+```
+
+when self-closing:
+
+```jsx
+render() {
+  return <input />
+}
+```
+
+with a component:
+
+```jsx
+import MyComponent from './my-component'
+
+export default {
+  render() {
+    return <MyComponent>hello</MyComponent>
+  }
+}
+```
+
+### Attributes/Props
+
+```jsx
+render() {
+  return <input type="email" />
+}
+```
+
+with a dynamic binding:
+
+```jsx
+render() {
+  return <input
+    type="email"
+    placeholder={this.placeholderText}
+  />
+}
+```
+
+with the spread operator:
+
+```jsx
+render() {
+  const inputAttrs = {
+    type: 'email',
+    placeholder: 'Enter your email'
+  }
+
+  return <input {...inputAttrs} />
+}
+```
+
+### Directives
+
+```jsx
+<input vModel="newTodoText" />
+```
+
+with a modifier:
+
+```jsx
+<input vModel_trim="newTodoText" />
+```
+
+with an argument:
+
+```jsx
+<input vOn:click="newTodoText" />
+```
+
+with an argument and modifiers:
+
+```jsx
+<input vOn:click_stop_prevent="newTodoText" />
+```
+
+### Functional Components
+
+Transpiles arrow functions that return JSX into functional components, when they are either default exports:
+
+```jsx
+export default ({ props }) => <p>hello { props.message }</p>
+```
+
+or PascalCase variable declarations:
+
+```jsx
+const HelloWorld = ({ props }) => <p>hello { props.message }</p>
+```
+
+## Compatibility
+
+This repo is only compatible with:
+
+- **Babel 7+**. For Babel 6 support, use [vuejs/babel-plugin-transform-vue-jsx](https://github.com/vuejs/babel-plugin-transform-vue-jsx)
+- **Vue 2+**. JSX is not supported for older versions.

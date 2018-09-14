@@ -132,12 +132,12 @@ const tests = [
   {
     name: 'Arguments-based injection into render arrow function with multiple arguments',
     from: `const obj = {
-      render: x => {
+      render: (x, y) => {
         return <div>test</div>
       }
     }`,
     to: `const obj = {
-  render: (h, x) => {
+  render: (h, x, y) => {
     return <div>test</div>;
   }
 };`,

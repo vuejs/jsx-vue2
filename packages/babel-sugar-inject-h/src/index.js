@@ -56,6 +56,25 @@ export default babel => {
     visitor: {
       Program(path) {
         path.traverse({
+          'ArrowFunctionExpression'(path) {
+            if (
+              path.parent.type !== 'ObjectProperty' &&
+              path.parent.type !== 'ClassProperty'
+            ) {
+              return
+            }
+            if (firstParamIsH(t, path) || !hasJSX(t, path) || isInsideJSXExpression(t, path)) {
+              return
+            }
+            if (path.parent.key.name !== 'render') {
+              return
+            }
+
+            const body = path.node.body
+            const params = [t.identifier('h'), ...path.node.params]
+
+            path.replaceWith(t.arrowFunctionExpression(params, body))
+          },
           'ObjectMethod|ClassMethod'(path) {
             if (firstParamIsH(t, path) || !hasJSX(t, path) || isInsideJSXExpression(t, path)) {
               return

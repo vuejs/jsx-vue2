@@ -103,6 +103,45 @@ const tests = [
 
 };`,
   },
+  {
+    name: 'Arguments-based injection into render arrow function without arguments',
+    from: `const obj = {
+      render: () => {
+        return <div>test</div>
+      }
+    }`,
+    to: `const obj = {
+  render: h => {
+    return <div>test</div>;
+  }
+};`,
+  },
+  {
+    name: 'Arguments-based injection into render arrow function with single argument',
+    from: `const obj = {
+      render: x => {
+        return <div>test</div>
+      }
+    }`,
+    to: `const obj = {
+  render: (h, x) => {
+    return <div>test</div>;
+  }
+};`,
+  },
+  {
+    name: 'Arguments-based injection into render arrow function with multiple arguments',
+    from: `const obj = {
+      render: x => {
+        return <div>test</div>
+      }
+    }`,
+    to: `const obj = {
+  render: (h, x) => {
+    return <div>test</div>;
+  }
+};`,
+  },
 ]
 
 tests.forEach(({ name, from, to }) => test(name, async t => t.is(await transpile(from), to)))

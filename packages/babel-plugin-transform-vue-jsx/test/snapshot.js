@@ -51,8 +51,8 @@ const tests = [
   },
   {
     name: 'Combined content',
-    from: `render(h => <div>test{test}{...test}<br/></div>)`,
-    to: `render(h => h("div", ["test", test, ...test, h("br")]));`,
+    from: `render(h => <div>  test{test} {...test}<br/>  </div>)`,
+    to: `render(h => h("div", ["test", test, " ", ...test, h("br")]));`,
   },
   {
     name: 'Plain attrs',

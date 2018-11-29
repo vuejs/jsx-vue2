@@ -79,15 +79,12 @@ const parseVModel = (t, path) => {
  * @param modifiers Set<string>
  */
 const transformModel = (t, path, valuePath, modifiers) => {
-	
-  if (isComponent(t, path)) {
-    return genComponentModel(t, path, valuePath, modifiers)
-  }
-
   const tag = getTagName(t, path)
   const type = getType(t, path)
 
-  if (tag === 'select') {
+  if (isComponent(t, path)) {
+    genComponentModel(t, path, valuePath, modifiers)
+  } else if (tag === 'select') {
     genSelect(t, path, valuePath, modifiers)
   } else if (tag === 'input' && type === 'checkbox') {
     genCheckboxModel(t, path, valuePath, modifiers)
@@ -98,6 +95,19 @@ const transformModel = (t, path, valuePath, modifiers) => {
   } else {
     throw new Error(`vModel: ${tag}[type=${type}] is not supported`)
   }
+
+  path.node.attributes.push(
+    t.jSXSpreadAttribute(
+      t.objectExpression([
+        t.objectProperty(
+          t.identifier('attrs'),
+            t.objectExpression([
+              t.objectProperty(t.identifier('value'), valuePath.node),
+            ]),
+        ),
+      ]),
+    ),
+  )
 }
 
 /**
@@ -161,7 +171,7 @@ const getType = (t, path) => {
  * @param body Array<Statement>
  */
 const addHandler = (t, path, event, body) => {
-  addProp(t, path, `on-${event}`, t.arrowFunctionExpression([t.identifier('$event')], t.blockStatement(body)))
+  addProp(t, path, `on-${event}`, t.arrowFunctionExpression([t.identifier('$$v')], t.blockStatement(body)))
 }
 
 /**
@@ -234,7 +244,7 @@ const getBindingAttr = (t, path, attribute) => {
  * @param modifiers Set<string>
  */
 const genComponentModel = (t, path, valuePath, modifiers) => {
-  const baseValueExpression = t.identifier('$event')
+  const baseValueExpression = t.identifier('$$v')
 
   const lazy = modifiers.has('lazy')
   const number = modifiers.has('number')
@@ -253,6 +263,7 @@ const genComponentModel = (t, path, valuePath, modifiers) => {
   if (number) {
     valueExpression = t.callExpression(t.memberExpression(t.thisExpression(), t.identifier('_n')), [valueExpression])
   }
+
 
   addHandler(t, path, event, [t.expressionStatement(genAssignmentCode(t, valuePath, valueExpression))])
   if (trim || number) {

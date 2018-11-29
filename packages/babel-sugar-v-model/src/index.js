@@ -2,7 +2,7 @@ import camelCase from 'camelcase'
 import syntaxJsx from '@babel/plugin-syntax-jsx'
 import htmlTags from 'html-tags'
 import svgTags from 'svg-tags'
-	
+
 const RANGE_TOKEN = '__r'
 
 const cachedCamelCase = (() => {
@@ -79,6 +79,7 @@ const parseVModel = (t, path) => {
  * @param modifiers Set<string>
  */
 const transformModel = (t, path, valuePath, modifiers) => {
+	
   if (isComponent(t, path)) {
     return genComponentModel(t, path, valuePath, modifiers)
   }
@@ -97,7 +98,6 @@ const transformModel = (t, path, valuePath, modifiers) => {
   } else {
     throw new Error(`vModel: ${tag}[type=${type}] is not supported`)
   }
-  addModel(t, path, valuePath, modifiers)
 }
 
 /**
@@ -114,8 +114,8 @@ const isComponent = (t, path) => {
   }
   else  {
 	  const tagName =  getTagName(t, path)
-      const firstChar = tagName.charAt(0)
-	  if ((firstChar >= 'A' && firstChar <= 'Z') || (!htmlTags.includes(tagName) && !svgTags.includes(tagName)))   {
+    const firstChar = tagName.charAt(0)
+	  if ((firstChar >= 'A' && firstChar <= 'Z') || (!htmlTags.includes(tagName) && !svgTags.includes(tagName))) {
 	  	return true
 	  }
 	  else {
@@ -234,34 +234,32 @@ const getBindingAttr = (t, path, attribute) => {
  * @param modifiers Set<string>
  */
 const genComponentModel = (t, path, valuePath, modifiers) => {
-  const baseValueExpression = t.identifier('$$v')
+  const baseValueExpression = t.identifier('$event')
+
+  const lazy = modifiers.has('lazy')
+  const number = modifiers.has('number')
+  const trim = modifiers.has('trim')
+  const event = lazy ? 'change' : 'input'
+
   let valueExpression = baseValueExpression
-  if (modifiers.has('trim')) {
+
+  if (trim) {
     valueExpression = t.conditionalExpression(
       t.binaryExpression('===', t.unaryExpression('typeof', baseValueExpression), t.stringLiteral('string')),
       t.callExpression(t.memberExpression(baseValueExpression, t.identifier('trim')), []),
       baseValueExpression,
     )
   }
-  if (modifiers.has('number')) {
+  if (number) {
     valueExpression = t.callExpression(t.memberExpression(t.thisExpression(), t.identifier('_n')), [valueExpression])
   }
-  const assignment = genAssignmentCode(t, valuePath, valueExpression)
 
-  path.node.attributes.push(
-    t.jSXAttribute(
-      t.jSXIdentifier('model'),
-      t.jSXExpressionContainer(
-        t.objectExpression([
-          t.objectProperty(t.identifier('value'), valuePath.node),
-          t.objectProperty(
-            t.identifier('callback'),
-            t.arrowFunctionExpression([t.identifier('$$v')], t.blockStatement([t.expressionStatement(assignment)])),
-          ),
-        ]),
-      ),
-    ),
-  )
+  addHandler(t, path, event, [t.expressionStatement(genAssignmentCode(t, valuePath, valueExpression))])
+  if (trim || number) {
+    addHandler(t, path, 'blur', [
+      t.expressionStatement(t.callExpression(t.memberExpression(t.thisExpression(), t.identifier('$forceUpdate')), [])),
+    ])
+  }
 }
 
 /**
@@ -463,29 +461,6 @@ const genRadioModel = (t, path, valuePath, modifiers) => {
   addHandler(t, path, 'change', [t.expressionStatement(genAssignmentCode(t, valuePath, valueBinding))])
 }
 
-const addModel = (t, path, valuePath, modifiers) => {
-  path.node.attributes.push(
-    t.jSXSpreadAttribute(
-      t.objectExpression([
-        t.objectProperty(
-          t.identifier('directives'),
-          t.arrayExpression([
-            t.objectExpression([
-              t.objectProperty(t.identifier('name'), t.stringLiteral('model')),
-              t.objectProperty(t.identifier('value'), valuePath.node),
-              t.objectProperty(
-                t.identifier('modifiers'),
-                t.objectExpression(
-                  [...modifiers].map(modifier => t.objectProperty(t.identifier(modifier), t.booleanLiteral(true))),
-                ),
-              ),
-            ]),
-          ]),
-        ),
-      ]),
-    ),
-  )
-}
 
 /**
  * Generate model props for generic input and textarea

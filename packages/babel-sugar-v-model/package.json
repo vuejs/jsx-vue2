@@ -18,23 +18,23 @@
     "prepublish": "yarn build"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-rc.3",
-    "@babel/core": "^7.0.0-rc.3",
-    "@babel/preset-env": "^7.0.0-rc.3",
-    "@vue/test-utils": "^1.0.0-beta.24",
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@vue/test-utils": "^1.0.0-beta.26",
     "ava": "^0.25.0",
-    "jsdom": "^12.0.0",
+    "jsdom": "^13.0.0",
     "jsdom-global": "^3.0.2",
-    "nyc": "^12.0.2",
-    "rollup": "^0.65.0",
-    "rollup-plugin-babel": "4.0.0-beta.8",
+    "nyc": "^13.1.0",
+    "rollup": "^0.67.4",
+    "rollup-plugin-babel": "4.0.3",
     "rollup-plugin-istanbul": "^2.0.1",
     "rollup-plugin-uglify-es": "^0.0.1",
     "vue": "^2.5.17",
     "vue-template-compiler": "^2.5.17"
   },
   "dependencies": {
-    "@babel/plugin-syntax-jsx": "^7.0.0-rc.3",
+    "@babel/plugin-syntax-jsx": "^7.2.0",
     "@vue/babel-helper-vue-jsx-merge-props": "^0.1.0",
     "@vue/babel-plugin-transform-vue-jsx": "^0.1.0",
     "camelcase": "^5.0.0"

@@ -7,6 +7,7 @@
   "author": "Nick Messing <dot.nick.dot.messing@gmail.com>",
   "license": "MIT",
   "private": false,
+  "files": [],
   "scripts": {
     "pretest:snapshot": "yarn build:test",
     "test:snapshot": "nyc --reporter=html --reporter=text-summary ava -v test/snapshot.js",

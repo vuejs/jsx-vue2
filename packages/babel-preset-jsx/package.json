@@ -8,6 +8,7 @@
   "author": "Nick Messing <dot.nick.dot.messing@gmail.com>",
   "license": "MIT",
   "private": false,
+  "files": [],
   "scripts": {
     "build": "rollup -c",
     "prerelease": "yarn build"

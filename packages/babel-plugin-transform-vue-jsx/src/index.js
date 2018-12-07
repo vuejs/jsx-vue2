@@ -3,7 +3,7 @@ import { addDefault } from '@babel/helper-module-imports'
 import kebabcase from 'lodash.kebabcase'
 
 const xlinkRE = /^xlink([A-Z])/
-const rootAttributes = ['class', 'style', 'key', 'ref', 'refInFor', 'slot', 'scopedSlots', 'model']
+const rootAttributes = ['staticClass', 'class', 'style', 'key', 'ref', 'refInFor', 'slot', 'scopedSlots', 'model']
 const prefixes = ['props', 'domProps', 'on', 'nativeOn', 'hook', 'attrs']
 const domPropsValueElements = ['input', 'textarea', 'option', 'select']
 const domPropsElements = [...domPropsValueElements, 'video']

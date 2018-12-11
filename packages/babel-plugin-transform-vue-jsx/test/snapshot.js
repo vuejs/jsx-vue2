@@ -25,9 +25,10 @@ const tests = [
     to: `render(h => h("div", ["test"]));`,
   },
   {
-    name: 'Uppercase component',
-    from: `render(h => <Div>test</Div>)`,
-    to: `render(h => h(Div, ["test"]));`,
+    name: 'Tag & Component',
+    from: `const Alpha = {}; render(h => [<Alpha>test</Alpha>, <Beta>test</Beta>])`,
+    to: `const Alpha = {};
+render(h => [h(Alpha, ["test"]), h("Beta", ["test"])]);`,
   },
   {
     name: 'MemberExpression component',

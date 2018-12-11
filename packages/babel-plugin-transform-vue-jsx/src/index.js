@@ -40,7 +40,7 @@ const getTag = (t, path) => {
   const namePath = path.get('name')
   if (t.isJSXIdentifier(namePath)) {
     const name = namePath.get('name').node
-    if (name[0] > 'A' && name[0] < 'Z') {
+    if (path.scope.hasBinding(name)) {
       return t.identifier(name)
     } else {
       return t.stringLiteral(name)

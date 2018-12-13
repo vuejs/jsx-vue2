@@ -1,6 +1,8 @@
 import syntaxJsx from '@babel/plugin-syntax-jsx'
 import { addDefault } from '@babel/helper-module-imports'
 import kebabcase from 'lodash.kebabcase'
+import htmlTags from 'html-tags'
+import svgTags from 'svg-tags'
 
 const xlinkRE = /^xlink([A-Z])/
 const rootAttributes = ['class', 'style', 'key', 'ref', 'refInFor', 'slot', 'scopedSlots', 'model']
@@ -40,7 +42,7 @@ const getTag = (t, path) => {
   const namePath = path.get('name')
   if (t.isJSXIdentifier(namePath)) {
     const name = namePath.get('name').node
-    if (path.scope.hasBinding(name)) {
+    if (path.scope.hasBinding(name) && !htmlTags.includes(name) && !svgTags.includes(name)) {
       return t.identifier(name)
     } else {
       return t.stringLiteral(name)

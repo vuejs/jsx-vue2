@@ -25,6 +25,12 @@ const tests = [
     to: `render(h => h("div", ["test"]));`,
   },
   {
+    name: 'HTML tag if variable in scope',
+    from: `const div = {}; render(h => <div>test</div>)`,
+    to: `const div = {};
+render(h => h("div", ["test"]));`,
+  },
+  {
     name: 'Tag & Component',
     from: `const Alpha = {}; render(h => [<Alpha>test</Alpha>, <Beta>test</Beta>])`,
     to: `const Alpha = {};

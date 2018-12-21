@@ -7,6 +7,7 @@
   "author": "Evan You",
   "license": "MIT",
   "private": false,
+  "files": [],
   "scripts": {
     "build:testing": "rollup -c rollup.config.testing.js",
     "build": "rollup -c",

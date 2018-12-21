@@ -8,9 +8,5 @@ export default {
       file: 'dist/plugin.cjs.js',
       format: 'cjs',
     },
-    {
-      file: 'dist/plugin.js',
-      format: 'esm',
-    },
   ],
 }

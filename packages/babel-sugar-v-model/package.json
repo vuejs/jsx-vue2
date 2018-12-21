@@ -38,7 +38,9 @@
     "@babel/plugin-syntax-jsx": "^7.2.0",
     "@vue/babel-helper-vue-jsx-merge-props": "^0.1.0",
     "@vue/babel-plugin-transform-vue-jsx": "^0.1.0",
-    "camelcase": "^5.0.0"
+    "camelcase": "^5.0.0",
+    "html-tags": "^2.0.0",
+    "svg-tags": "^1.0.0"
   },
   "nyc": {
     "exclude": [

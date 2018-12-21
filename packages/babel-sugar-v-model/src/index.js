@@ -1,5 +1,7 @@
 import camelCase from 'camelcase'
 import syntaxJsx from '@babel/plugin-syntax-jsx'
+import htmlTags from 'html-tags'
+import svgTags from 'svg-tags'
 
 const RANGE_TOKEN = '__r'
 
@@ -109,10 +111,11 @@ const isComponent = (t, path) => {
   const name = path.get('name')
   if (t.isJSXMemberExpression(name)) {
     return true
-  } else {
-    const firstChar = name.get('name').node[0]
-    return firstChar >= 'A' && firstChar <= 'Z'
   }
+  
+  const tag = name.get('name').node
+
+  return !htmlTags.includes(tag) && !svgTags.includes(tag)
 }
 
 /**

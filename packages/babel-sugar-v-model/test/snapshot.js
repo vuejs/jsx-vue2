@@ -35,6 +35,16 @@ const tests = [
 }} />;`,
   },
   {
+    name: 'Kebab case component vModel',
+    from: `const A = <my-component vModel={a.b} />`,
+    to: `const A = <my-component model={{
+  value: a.b,
+  callback: $$v => {
+    a.b = $$v;
+  }
+}} />;`,
+  },
+  {
     name: 'MemberExpression component vModel',
     from: `const A = <a.b vModel={a.b} />`,
     to: `const A = <a.b model={{

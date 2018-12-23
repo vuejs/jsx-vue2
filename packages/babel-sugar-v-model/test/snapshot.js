@@ -127,7 +127,7 @@ const tests = [
   {
     name: 'Generic input[type="checkbox"] vModel',
     from: `const A = <input type="checkbox" vModel={a.b} />`,
-    to: `const A = <input type="checkbox" domProps-checked={Array.isArray(a.b) ? this._i(a.b, null) > -1 : a.b} on-change={$event => {
+    to: `const A = <input on-change={$event => {
   const $$a = a.b,
         $$el = $event.target,
         $$c = $$el.checked ? true : false;
@@ -144,7 +144,7 @@ const tests = [
   } else {
     a.b = $$c;
   }
-}} {...{
+}} type="checkbox" domProps-checked={Array.isArray(a.b) ? this._i(a.b, null) > -1 : a.b} {...{
   directives: [{
     name: "model",
     value: a.b,
@@ -155,7 +155,7 @@ const tests = [
   {
     name: 'input[type="checkbox"] vModel_number',
     from: `const A = <input type="checkbox" vModel_number={a.b} />`,
-    to: `const A = <input type="checkbox" domProps-checked={Array.isArray(a.b) ? this._i(a.b, null) > -1 : a.b} on-change={$event => {
+    to: `const A = <input on-change={$event => {
   const $$a = a.b,
         $$el = $event.target,
         $$c = $$el.checked ? true : false;
@@ -172,7 +172,7 @@ const tests = [
   } else {
     a.b = $$c;
   }
-}} {...{
+}} type="checkbox" domProps-checked={Array.isArray(a.b) ? this._i(a.b, null) > -1 : a.b} {...{
   directives: [{
     name: "model",
     value: a.b,
@@ -185,7 +185,7 @@ const tests = [
   {
     name: 'input[type="checkbox"] vModel with value, trueValue and falseValue',
     from: `const A = <input type="checkbox" vModel={a.b} value="abc" trueValue={trueVal} falseValue={falseVal} />`,
-    to: `const A = <input type="checkbox" domProps-checked={Array.isArray(a.b) ? this._i(a.b, "abc") > -1 : this._q(a.b, trueVal)} on-change={$event => {
+    to: `const A = <input on-change={$event => {
   const $$a = a.b,
         $$el = $event.target,
         $$c = $$el.checked ? trueVal : falseVal;
@@ -202,7 +202,7 @@ const tests = [
   } else {
     a.b = $$c;
   }
-}} {...{
+}} type="checkbox" domProps-checked={Array.isArray(a.b) ? this._i(a.b, "abc") > -1 : this._q(a.b, trueVal)} {...{
   directives: [{
     name: "model",
     value: a.b,
@@ -213,9 +213,9 @@ const tests = [
   {
     name: 'Generic input[type="radio"] vModel',
     from: `const A = <input type="radio" vModel={a.b} />`,
-    to: `const A = <input type="radio" domProps-checked={this._q(a.b, null)} on-change={$event => {
+    to: `const A = <input on-change={$event => {
   a.b = null;
-}} {...{
+}} type="radio" domProps-checked={this._q(a.b, null)} {...{
   directives: [{
     name: "model",
     value: a.b,
@@ -226,9 +226,9 @@ const tests = [
   {
     name: 'input[type="radio"] vModel_number',
     from: `const A = <input type="radio" vModel_number={a.b} value="10" />`,
-    to: `const A = <input type="radio" domProps-checked={this._q(a.b, this._n("10"))} on-change={$event => {
+    to: `const A = <input on-change={$event => {
   a.b = this._n("10");
-}} {...{
+}} type="radio" domProps-checked={this._q(a.b, this._n("10"))} {...{
   directives: [{
     name: "model",
     value: a.b,
@@ -241,10 +241,10 @@ const tests = [
   {
     name: 'Generic input[type="text"] vModel',
     from: `const A = <input type="text" vModel={a.b} />`,
-    to: `const A = <input type="text" domProps-value={a.b} on-input={$event => {
+    to: `const A = <input on-input={$event => {
   if ($event.target.composing) return;
   a.b = $event.target.value;
-}} {...{
+}} type="text" domProps-value={a.b} {...{
   directives: [{
     name: "model",
     value: a.b,
@@ -255,10 +255,10 @@ const tests = [
   {
     name: 'Generic textarea vModel',
     from: `const A = <textarea vModel={a.b} />`,
-    to: `const A = <textarea domProps-value={a.b} on-input={$event => {
+    to: `const A = <textarea on-input={$event => {
   if ($event.target.composing) return;
   a.b = $event.target.value;
-}} {...{
+}} domProps-value={a.b} {...{
   directives: [{
     name: "model",
     value: a.b,
@@ -269,11 +269,11 @@ const tests = [
   {
     name: 'input[type="text"] vModel_lazy_trim_number',
     from: `const A = <input type="text" vModel_lazy_trim_number={a.b} />`,
-    to: `const A = <input type="text" domProps-value={a.b} on-change={$event => {
-  a.b = this._n($event.target.value.trim());
-}} on-blur={$event => {
+    to: `const A = <input on-blur={$event => {
   this.$forceUpdate();
-}} {...{
+}} on-change={$event => {
+  a.b = this._n($event.target.value.trim());
+}} type="text" domProps-value={a.b} {...{
   directives: [{
     name: "model",
     value: a.b,
@@ -288,12 +288,26 @@ const tests = [
   {
     name: 'input[type="range"] vModel',
     from: `const A = <input type="range" vModel={a.b} />`,
-    to: `const A = <input type="range" domProps-value={a.b} on-__r={$event => {
+    to: `const A = <input on-__r={$event => {
   a.b = $event.target.value;
-}} {...{
+}} type="range" domProps-value={a.b} {...{
   directives: [{
     name: "model",
     value: a.b,
+    modifiers: {}
+  }]
+}} />;`,
+  },
+  {
+    name: 'event listener added before other listeners',
+    from: `const A = <input onInput={this.someMethod} vModel={this.model} />`,
+    to: `const A = <input on-input={$event => {
+  if ($event.target.composing) return;
+  this.model = $event.target.value;
+}} onInput={this.someMethod} domProps-value={this.model} {...{
+  directives: [{
+    name: "model",
+    value: this.model,
     modifiers: {}
   }]
 }} />;`,

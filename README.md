@@ -1,6 +1,6 @@
 # Babel Preset JSX
 
-Configurable Babel preset to add Vue JSX support. See the [configuration options here](https://github.com/vuejs/jsx/tree/docs/init/packages/babel-preset-jsx).
+Configurable Babel preset to add Vue JSX support. See the [configuration options here](./packages/babel-preset-jsx).
 
 ## Installation
 

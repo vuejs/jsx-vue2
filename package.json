@@ -6,7 +6,8 @@
     "test": "lerna run test",
     "release:note": "node scripts/gen-release-notes.js run",
     "release:build": "lerna run build",
-    "prerelease": "yarn release:note && yarn release:build",
+    "prerelease": "yarn release:build",
+    "postrelease": "yarn release:note",
     "release": "lerna publish"
   },
   "devDependencies": {

@@ -733,11 +733,11 @@ test('select should work', async t => {
 
   t.is(wrapper.vm.test, 'b')
   t.is(wrapper.element.value, 'b')
-  t.is(wrapper.element.childNodes[1].selected, true)
+  t.is(wrapper.element.children[1].selected, true)
   wrapper.vm.test = 'c'
   await wrapper.vm.$nextTick()
   t.is(wrapper.element.value, 'c')
-  t.is(wrapper.element.childNodes[2].selected, true)
+  t.is(wrapper.element.children[2].selected, true)
   wrapper.element.value = 'a'
   wrapper.trigger('change')
   t.is(wrapper.vm.test, 'a')
@@ -760,11 +760,11 @@ test('select should work with value bindings', async t => {
   })
 
   t.is(wrapper.element.value, '2')
-  t.is(wrapper.element.childNodes[1].selected, true)
+  t.is(wrapper.element.children[1].selected, true)
   wrapper.vm.test = 3
   await wrapper.vm.$nextTick()
   t.is(wrapper.element.value, '3')
-  t.is(wrapper.element.childNodes[2].selected, true)
+  t.is(wrapper.element.children[2].selected, true)
 
   wrapper.element.value = '1'
   wrapper.trigger('change')
@@ -791,10 +791,10 @@ test('select should work with value bindings (object loose equal)', async t => {
     },
   })
 
-  t.is(wrapper.element.childNodes[1].selected, true)
+  t.is(wrapper.element.children[1].selected, true)
   wrapper.vm.test = { a: 3 }
   await wrapper.vm.$nextTick()
-  t.is(wrapper.element.childNodes[2].selected, true)
+  t.is(wrapper.element.children[2].selected, true)
 
   wrapper.element.value = '1'
   wrapper.trigger('change')
@@ -820,10 +820,10 @@ test('select should work with value bindings (Array loose equal)', async t => {
       )
     },
   })
-  t.is(wrapper.element.childNodes[1].selected, true)
+  t.is(wrapper.element.children[1].selected, true)
   wrapper.vm.test = [{ a: 3 }]
   await wrapper.vm.$nextTick()
-  t.is(wrapper.element.childNodes[2].selected, true)
+  t.is(wrapper.element.children[2].selected, true)
 
   wrapper.element.value = '1'
   wrapper.trigger('change')
@@ -852,19 +852,19 @@ test('select should work with v-for', async t => {
   })
   t.is(wrapper.vm.test, 'b')
   t.is(wrapper.element.value, 'b')
-  t.is(wrapper.element.childNodes[1].selected, true)
+  t.is(wrapper.element.children[1].selected, true)
   wrapper.vm.test = 'c'
   await wrapper.vm.$nextTick()
   t.is(wrapper.element.value, 'c')
-  t.is(wrapper.element.childNodes[2].selected, true)
+  t.is(wrapper.element.children[2].selected, true)
   wrapper.element.value = 'a'
   wrapper.trigger('change')
   t.is(wrapper.vm.test, 'a')
   // update v-for opts
   wrapper.vm.opts = ['d', 'a']
   await wrapper.vm.$nextTick()
-  t.is(wrapper.element.childNodes[0].selected, false)
-  t.is(wrapper.element.childNodes[1].selected, true)
+  t.is(wrapper.element.children[0].selected, false)
+  t.is(wrapper.element.children[1].selected, true)
 })
 
 test('select should work with v-for & value bindings', async t => {
@@ -884,19 +884,19 @@ test('select should work with v-for & value bindings', async t => {
     },
   })
   t.is(wrapper.element.value, '2')
-  t.is(wrapper.element.childNodes[1].selected, true)
+  t.is(wrapper.element.children[1].selected, true)
   wrapper.vm.test = 3
   await wrapper.vm.$nextTick()
   t.is(wrapper.element.value, '3')
-  t.is(wrapper.element.childNodes[2].selected, true)
+  t.is(wrapper.element.children[2].selected, true)
   wrapper.element.value = 1
   wrapper.trigger('change')
   t.is(wrapper.vm.test, 1)
   // update v-for opts
   wrapper.vm.opts = [0, 1]
   await wrapper.vm.$nextTick()
-  t.is(wrapper.element.childNodes[0].selected, false)
-  t.is(wrapper.element.childNodes[1].selected, true)
+  t.is(wrapper.element.children[0].selected, false)
+  t.is(wrapper.element.children[1].selected, true)
 })
 
 test('select should work with select which has no default selected options', async t => {
@@ -1157,10 +1157,10 @@ test('select should work with option value that has circular reference', async t
   })
   t.is(wrapper.vm.test, 'b')
   t.is(wrapper.element.value, 'b')
-  t.is(wrapper.element.childNodes[1].selected, true)
+  t.is(wrapper.element.children[1].selected, true)
   wrapper.vm.test = circular
   await wrapper.vm.$nextTick()
-  t.is(wrapper.element.childNodes[0].selected, true)
+  t.is(wrapper.element.children[0].selected, true)
 })
 
 // #6112

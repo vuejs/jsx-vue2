@@ -221,13 +221,9 @@ test('should support keyCode', t => {
   })
 
   t.is(stub.calls.length, 0)
-  wrapper.trigger('keyup', {
-    keyCode: 100,
-  })
+  wrapper.trigger('keyup')
   t.is(stub.calls.length, 0)
-  wrapper.trigger('keyup', {
-    keyCode: 13,
-  })
+  wrapper.trigger('keyup.enter')
   t.is(stub.calls.length, 1)
 })
 
@@ -343,13 +339,9 @@ test('should support number keyCode', t => {
   })
 
   t.is(stub.calls.length, 0)
-  wrapper.trigger('keyup', {
-    keyCode: 100,
-  })
+  wrapper.trigger('keyup')
   t.is(stub.calls.length, 0)
-  wrapper.trigger('keyup', {
-    keyCode: 13,
-  })
+  wrapper.trigger('keyup.enter')
   t.is(stub.calls.length, 1)
 })
 
@@ -542,17 +534,17 @@ test('should support keyboard modifier for direction keys', t => {
       )
     },
   })
-  wrapper.find('#left').trigger('keydown', { keyCode: 37 })
-  wrapper.find('#left').trigger('keydown', { keyCode: 39 })
+  wrapper.find('#left').trigger('keydown.left')
+  wrapper.find('#left').trigger('keydown.right')
 
-  wrapper.find('#right').trigger('keydown', { keyCode: 39 })
-  wrapper.find('#right').trigger('keydown', { keyCode: 38 })
+  wrapper.find('#right').trigger('keydown.right')
+  wrapper.find('#right').trigger('keydown.up')
 
-  wrapper.find('#up').trigger('keydown', { keyCode: 38 })
-  wrapper.find('#up').trigger('keydown', { keyCode: 37 })
+  wrapper.find('#up').trigger('keydown.up')
+  wrapper.find('#up').trigger('keydown.left')
 
-  wrapper.find('#down').trigger('keydown', { keyCode: 40 })
-  wrapper.find('#down').trigger('keydown', { keyCode: 39 })
+  wrapper.find('#down').trigger('keydown.down')
+  wrapper.find('#down').trigger('keydown.right')
 
   t.is(stubLeft.calls.length, 1)
   t.is(stubRight.calls.length, 1)

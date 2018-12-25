@@ -1,9 +1,11 @@
 import syntaxJsx from '@babel/plugin-syntax-jsx'
 import { addDefault } from '@babel/helper-module-imports'
 import kebabcase from 'lodash.kebabcase'
+import htmlTags from 'html-tags'
+import svgTags from 'svg-tags'
 
 const xlinkRE = /^xlink([A-Z])/
-const rootAttributes = ['class', 'style', 'key', 'ref', 'refInFor', 'slot', 'scopedSlots', 'model']
+const rootAttributes = ['staticClass', 'class', 'style', 'key', 'ref', 'refInFor', 'slot', 'scopedSlots', 'model']
 const prefixes = ['props', 'domProps', 'on', 'nativeOn', 'hook', 'attrs']
 const domPropsValueElements = ['input', 'textarea', 'option', 'select']
 const domPropsElements = [...domPropsValueElements, 'video']
@@ -40,7 +42,7 @@ const getTag = (t, path) => {
   const namePath = path.get('name')
   if (t.isJSXIdentifier(namePath)) {
     const name = namePath.get('name').node
-    if (name[0] > 'A' && name[0] < 'Z') {
+    if (path.scope.hasBinding(name) && !htmlTags.includes(name) && !svgTags.includes(name)) {
       return t.identifier(name)
     } else {
       return t.stringLiteral(name)
@@ -63,9 +65,9 @@ const getTag = (t, path) => {
  */
 const getChildren = (t, paths) =>
   paths
-    .map(path => {
+    .map((path, index) => {
       if (path.isJSXText()) {
-        return transformJSXText(t, path)
+        return transformJSXText(t, path, index === 0 ? -1 : index === paths.length - 1 ? 1 : 0)
       }
       if (path.isJSXExpressionContainer()) {
         return transformJSXExpressionContainer(t, path)
@@ -361,13 +363,24 @@ const transformJSXMemberExpression = (t, path) => {
 }
 
 /**
+ * Trim text from JSX expressions depending on position
+ * @param string string
+ * @param position -1 for left, 0 for middle and 1 for right
+ * @returns string
+ */
+const trimText = (string, position) => (position === 0 ? string : string.replace(position === -1 ? /^\s*/ : /\s*$/, ''))
+
+/**
  * Transform JSXText to StringLiteral
  * @param t
  * @param path JSXText
+ * @param position -1 for left, 0 for middle and 1 for right
  * @returns StringLiteral
  */
-const transformJSXText = (t, path) =>
-  path.get('value').node.match(/^\s*$/) ? null : t.stringLiteral(path.get('value').node)
+const transformJSXText = (t, path, position) => {
+  const string = trimText(path.get('value').node, position)
+  return string ? t.stringLiteral(string) : null
+}
 
 /**
  * Transform JSXExpressionContainer to Expression

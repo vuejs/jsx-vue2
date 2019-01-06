@@ -158,6 +158,9 @@ const parseAttributeJSXAttribute = (t, path, attributes, tagName, elementType) =
   } else {
     name = namePath.get('name').node
   }
+  if (prefixes.includes(name) && t.isJSXExpressionContainer(path.get('value'))) {
+    return t.JSXSpreadAttribute(t.objectExpression([t.objectProperty(t.stringLiteral(name), path.get('value').node.expression)]))
+  }
 
   ;[name, ...modifiers] = name.split('_')
   ;[name, argument] = name.split(':')
@@ -233,16 +236,24 @@ const parseAttributeJSXSpreadAttribute = (t, path, attributes, attributesArray) 
  * @param t
  * @param paths Array<JSXAttribute | JSXSpreadAttribute>
  * @param tag Identifier | StringLiteral | MemberExpression
+ * @param openingElementPath JSXOpeningElement
  * @returns Array<Expression>
  */
-const getAttributes = (t, paths, tag) => {
+const getAttributes = (t, paths, tag, openingElementPath) => {
   const attributesArray = []
   let attributes = {}
 
   const { tagName, canContainDomProps, elementType } = parseMagicDomPropsInfo(t, paths, tag)
   paths.forEach(path => {
     if (t.isJSXAttribute(path)) {
-      parseAttributeJSXAttribute(t, path, attributes, tagName, elementType)
+      const possibleSpreadNode = parseAttributeJSXAttribute(t, path, attributes, tagName, elementType)
+      if (possibleSpreadNode) {
+        openingElementPath.node.attributes.push(possibleSpreadNode)
+        const attributePaths = openingElementPath.get('attributes')
+        const lastAttributePath = attributePaths[attributePaths.length - 1]
+        attributes = parseAttributeJSXSpreadAttribute(t, lastAttributePath, attributes, attributesArray)
+        lastAttributePath.remove()
+      }
       return
     }
     /* istanbul ignore else */
@@ -328,7 +339,8 @@ const transformAttributes = (t, attributes) =>
 const transformJSXElement = (t, path) => {
   const tag = getTag(t, path.get('openingElement'))
   const children = getChildren(t, path.get('children'))
-  const attributes = getAttributes(t, path.get('openingElement.attributes'), tag)
+  const openingElementPath = path.get('openingElement')
+  const attributes = getAttributes(t, openingElementPath.get('attributes'), tag, openingElementPath)
 
   const args = [tag]
   if (attributes) {

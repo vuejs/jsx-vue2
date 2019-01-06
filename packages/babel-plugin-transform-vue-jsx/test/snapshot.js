@@ -301,6 +301,21 @@ render(h => h("div", _mergeJSXProps([{}, spread, {
   }
 });`,
   },
+  {
+    name: 'Root attribute',
+    from: `<MyComponent propsProp1="foo" props={{ prop1: 'alpha', prop2: 'beta' }} />`,
+    to: `import _mergeJSXProps from "@vue/babel-helper-vue-jsx-merge-props";
+h("MyComponent", _mergeJSXProps([{
+  "props": {
+    "prop1": "foo"
+  }
+}, {
+  "props": {
+    prop1: 'alpha',
+    prop2: 'beta'
+  }
+}]));`,
+  },
 ]
 
 tests.forEach(({ name, from, to }) => test(name, async t => t.is(await transpile(from), to)))

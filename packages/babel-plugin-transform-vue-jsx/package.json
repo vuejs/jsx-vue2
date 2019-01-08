@@ -42,9 +42,6 @@
     "lodash.kebabcase": "^4.1.1",
     "svg-tags": "^1.0.0"
   },
-  "peerDependencies": {
-    "@vue/babel-helper-vue-jsx-merge-props": "^0.1.0"
-  },
   "nyc": {
     "exclude": [
       "dist",

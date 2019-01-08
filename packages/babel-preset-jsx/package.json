@@ -23,8 +23,5 @@
   "devDependencies": {
     "rollup": "^0.67.4",
     "rollup-plugin-babel-minify": "^6.2.0"
-  },
-  "peerDependencies": {
-    "@vue/babel-helper-vue-jsx-merge-props": "^0.1.0"
   }
 }

@@ -58,8 +58,17 @@ render(h => [h(Alpha, ["test"]), h("Beta", ["test"])]);`,
   },
   {
     name: 'Combined content',
-    from: `render(h => <div>  test{test} {...test}<br/>  </div>)`,
-    to: `render(h => h("div", ["test", test, " ", ...test, h("br")]));`,
+    from: `render(h => <div>
+  test{test} {...test}
+  <tag1 />
+  <tag2 />
+
+  Some text
+  goes here
+
+
+</div>)`,
+    to: `render(h => h("div", ["test", test, " ", ...test, h("tag1"), h("tag2"), "Some text goes here"]));`,
   },
   {
     name: 'Plain attrs',

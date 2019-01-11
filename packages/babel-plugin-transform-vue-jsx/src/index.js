@@ -65,9 +65,9 @@ const getTag = (t, path) => {
  */
 const getChildren = (t, paths) =>
   paths
-    .map((path, index) => {
+    .map(path => {
       if (path.isJSXText()) {
-        return transformJSXText(t, path, index === 0 ? -1 : index === paths.length - 1 ? 1 : 0)
+        return transformJSXText(t, path)
       }
       if (path.isJSXExpressionContainer()) {
         return transformJSXExpressionContainer(t, path)
@@ -158,6 +158,9 @@ const parseAttributeJSXAttribute = (t, path, attributes, tagName, elementType) =
   } else {
     name = namePath.get('name').node
   }
+  if (prefixes.includes(name) && t.isJSXExpressionContainer(path.get('value'))) {
+    return t.JSXSpreadAttribute(t.objectExpression([t.objectProperty(t.stringLiteral(name), path.get('value').node.expression)]))
+  }
 
   ;[name, ...modifiers] = name.split('_')
   ;[name, argument] = name.split(':')
@@ -233,16 +236,24 @@ const parseAttributeJSXSpreadAttribute = (t, path, attributes, attributesArray) 
  * @param t
  * @param paths Array<JSXAttribute | JSXSpreadAttribute>
  * @param tag Identifier | StringLiteral | MemberExpression
+ * @param openingElementPath JSXOpeningElement
  * @returns Array<Expression>
  */
-const getAttributes = (t, paths, tag) => {
+const getAttributes = (t, paths, tag, openingElementPath) => {
   const attributesArray = []
   let attributes = {}
 
   const { tagName, canContainDomProps, elementType } = parseMagicDomPropsInfo(t, paths, tag)
   paths.forEach(path => {
     if (t.isJSXAttribute(path)) {
-      parseAttributeJSXAttribute(t, path, attributes, tagName, elementType)
+      const possibleSpreadNode = parseAttributeJSXAttribute(t, path, attributes, tagName, elementType)
+      if (possibleSpreadNode) {
+        openingElementPath.node.attributes.push(possibleSpreadNode)
+        const attributePaths = openingElementPath.get('attributes')
+        const lastAttributePath = attributePaths[attributePaths.length - 1]
+        attributes = parseAttributeJSXSpreadAttribute(t, lastAttributePath, attributes, attributesArray)
+        lastAttributePath.remove()
+      }
       return
     }
     /* istanbul ignore else */
@@ -328,7 +339,8 @@ const transformAttributes = (t, attributes) =>
 const transformJSXElement = (t, path) => {
   const tag = getTag(t, path.get('openingElement'))
   const children = getChildren(t, path.get('children'))
-  const attributes = getAttributes(t, path.get('openingElement.attributes'), tag)
+  const openingElementPath = path.get('openingElement')
+  const attributes = getAttributes(t, openingElementPath.get('attributes'), tag, openingElementPath)
 
   const args = [tag]
   if (attributes) {
@@ -363,23 +375,55 @@ const transformJSXMemberExpression = (t, path) => {
 }
 
 /**
- * Trim text from JSX expressions depending on position
- * @param string string
- * @param position -1 for left, 0 for middle and 1 for right
- * @returns string
- */
-const trimText = (string, position) => (position === 0 ? string : string.replace(position === -1 ? /^\s*/ : /\s*$/, ''))
-
-/**
  * Transform JSXText to StringLiteral
  * @param t
  * @param path JSXText
- * @param position -1 for left, 0 for middle and 1 for right
  * @returns StringLiteral
  */
-const transformJSXText = (t, path, position) => {
-  const string = trimText(path.get('value').node, position)
-  return string ? t.stringLiteral(string) : null
+const transformJSXText = (t, path) => {
+  const node = path.node
+  const lines = node.value.split(/\r\n|\n|\r/)
+
+  let lastNonEmptyLine = 0
+
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].match(/[^ \t]/)) {
+      lastNonEmptyLine = i
+    }
+  }
+
+  let str = ''
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+
+    const isFirstLine = i === 0
+    const isLastLine = i === lines.length - 1
+    const isLastNonEmptyLine = i === lastNonEmptyLine
+
+    // replace rendered whitespace tabs with spaces
+    let trimmedLine = line.replace(/\t/g, ' ')
+
+    // trim whitespace touching a newline
+    if (!isFirstLine) {
+      trimmedLine = trimmedLine.replace(/^[ ]+/, '')
+    }
+
+    // trim whitespace touching an endline
+    if (!isLastLine) {
+      trimmedLine = trimmedLine.replace(/[ ]+$/, '')
+    }
+
+    if (trimmedLine) {
+      if (!isLastNonEmptyLine) {
+        trimmedLine += ' '
+      }
+
+      str += trimmedLine
+    }
+  }
+
+  return str !== '' ? t.stringLiteral(str) : null
 }
 
 /**

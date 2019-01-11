@@ -45,3 +45,4 @@ Options are:
 - `functional` [@vue/babel-sugar-functional-vue](../babel-sugar-functional-vue/README.md) - Functional components syntactic sugar
 - `injectH` [@vue/babel-sugar-inject-h](../babel-sugar-inject-h/README.md) - Automatic `h` injection syntactic sugar
 - `vModel` [@vue/babel-sugar-v-model](../babel-sugar-v-model/README.md) - `vModel` syntactic sugar
+- `vOn` [@vue/babel-sugar-v-on](../babel-sugar-v-on/README.md) - `vOn` syntactic sugar

@@ -58,8 +58,17 @@ render(h => [h(Alpha, ["test"]), h("Beta", ["test"])]);`,
   },
   {
     name: 'Combined content',
-    from: `render(h => <div>  test{test} {...test}<br/>  </div>)`,
-    to: `render(h => h("div", ["test", test, " ", ...test, h("br")]));`,
+    from: `render(h => <div>
+  test{test} {...test}
+  <tag1 />
+  <tag2 />
+
+  Some text
+  goes here
+
+
+</div>)`,
+    to: `render(h => h("div", ["test", test, " ", ...test, h("tag1"), h("tag2"), "Some text goes here"]));`,
   },
   {
     name: 'Plain attrs',
@@ -300,6 +309,21 @@ render(h => h("div", _mergeJSXProps([{}, spread, {
     "click": [listner1, listner2, listner3]
   }
 });`,
+  },
+  {
+    name: 'Root attribute',
+    from: `<MyComponent propsProp1="foo" props={{ prop1: 'alpha', prop2: 'beta' }} />`,
+    to: `import _mergeJSXProps from "@vue/babel-helper-vue-jsx-merge-props";
+h("MyComponent", _mergeJSXProps([{
+  "props": {
+    "prop1": "foo"
+  }
+}, {
+  "props": {
+    prop1: 'alpha',
+    prop2: 'beta'
+  }
+}]));`,
   },
 ]
 

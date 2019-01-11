@@ -1,3 +1,17 @@
+# [1.0.0-beta.2](https://github.com/vuejs/jsx/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2019-01-11)
+
+## other
+
+#### Bug Fixes
+
+* remove extraneous peer deps ([29414a7](https://github.com/vuejs/jsx/commit/29414a7))
+* Trim whitespaces properly, fix [#37](https://github.com/vuejs/jsx/issues/37) ([54c75ee](https://github.com/vuejs/jsx/commit/54c75ee))
+#### Features
+
+* Support root-level attributes, close [#32](https://github.com/vuejs/jsx/issues/32) ([96b182c](https://github.com/vuejs/jsx/commit/96b182c))
+
+
+
 # 1.0.0-beta.1 (2018-12-25)
 
 ## other

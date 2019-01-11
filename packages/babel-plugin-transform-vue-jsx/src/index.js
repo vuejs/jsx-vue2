@@ -65,9 +65,9 @@ const getTag = (t, path) => {
  */
 const getChildren = (t, paths) =>
   paths
-    .map((path, index) => {
+    .map(path => {
       if (path.isJSXText()) {
-        return transformJSXText(t, path, index === 0 ? -1 : index === paths.length - 1 ? 1 : 0)
+        return transformJSXText(t, path)
       }
       if (path.isJSXExpressionContainer()) {
         return transformJSXExpressionContainer(t, path)
@@ -375,23 +375,55 @@ const transformJSXMemberExpression = (t, path) => {
 }
 
 /**
- * Trim text from JSX expressions depending on position
- * @param string string
- * @param position -1 for left, 0 for middle and 1 for right
- * @returns string
- */
-const trimText = (string, position) => (position === 0 ? string : string.replace(position === -1 ? /^\s*/ : /\s*$/, ''))
-
-/**
  * Transform JSXText to StringLiteral
  * @param t
  * @param path JSXText
- * @param position -1 for left, 0 for middle and 1 for right
  * @returns StringLiteral
  */
-const transformJSXText = (t, path, position) => {
-  const string = trimText(path.get('value').node, position)
-  return string ? t.stringLiteral(string) : null
+const transformJSXText = (t, path) => {
+  const node = path.node
+  const lines = node.value.split(/\r\n|\n|\r/)
+
+  let lastNonEmptyLine = 0
+
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].match(/[^ \t]/)) {
+      lastNonEmptyLine = i
+    }
+  }
+
+  let str = ''
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+
+    const isFirstLine = i === 0
+    const isLastLine = i === lines.length - 1
+    const isLastNonEmptyLine = i === lastNonEmptyLine
+
+    // replace rendered whitespace tabs with spaces
+    let trimmedLine = line.replace(/\t/g, ' ')
+
+    // trim whitespace touching a newline
+    if (!isFirstLine) {
+      trimmedLine = trimmedLine.replace(/^[ ]+/, '')
+    }
+
+    // trim whitespace touching an endline
+    if (!isLastLine) {
+      trimmedLine = trimmedLine.replace(/[ ]+$/, '')
+    }
+
+    if (trimmedLine) {
+      if (!isLastNonEmptyLine) {
+        trimmedLine += ' '
+      }
+
+      str += trimmedLine
+    }
+  }
+
+  return str !== '' ? t.stringLiteral(str) : null
 }
 
 /**

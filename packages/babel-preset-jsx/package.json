@@ -1,6 +1,6 @@
 {
   "name": "@vue/babel-preset-jsx",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "Babel preset for Vue JSX",
   "main": "dist/plugin.cjs.js",
   "repository": "https://github.com/vuejs/jsx/tree/master/packages/babel-sugar-event-modifiers",
@@ -13,12 +13,12 @@
     "prerelease": "yarn build"
   },
   "dependencies": {
-    "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0-beta.1",
-    "@vue/babel-plugin-transform-vue-jsx": "^1.0.0-beta.1",
-    "@vue/babel-sugar-functional-vue": "^1.0.0-beta.1",
-    "@vue/babel-sugar-inject-h": "^1.0.0-beta.1",
-    "@vue/babel-sugar-v-model": "^1.0.0-beta.1",
-    "@vue/babel-sugar-v-on": "^1.0.0-beta.1"
+    "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0-beta.2",
+    "@vue/babel-plugin-transform-vue-jsx": "^1.0.0-beta.2",
+    "@vue/babel-sugar-functional-vue": "^1.0.0-beta.2",
+    "@vue/babel-sugar-inject-h": "^1.0.0-beta.2",
+    "@vue/babel-sugar-v-model": "^1.0.0-beta.2",
+    "@vue/babel-sugar-v-on": "^1.0.0-beta.2"
   },
   "devDependencies": {
     "rollup": "^0.67.4",

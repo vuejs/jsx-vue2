@@ -3,7 +3,7 @@
   "version": "1.0.0-beta.2",
   "description": "Babel preset for Vue JSX",
   "main": "dist/plugin.cjs.js",
-  "repository": "https://github.com/vuejs/jsx/tree/master/packages/babel-sugar-event-modifiers",
+  "repository": "https://github.com/vuejs/jsx/tree/master/packages/babel-preset-jsx",
   "author": "Nick Messing <dot.nick.dot.messing@gmail.com>",
   "license": "MIT",
   "private": false,

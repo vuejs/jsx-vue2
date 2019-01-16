@@ -3,7 +3,7 @@
   "version": "1.0.0-beta.2",
   "description": "Babel syntactic sugar for v-model support in Vue JSX",
   "main": "dist/plugin.js",
-  "repository": "https://github.com/vuejs/jsx/tree/master/packages/babel-sugar-event-modifiers",
+  "repository": "https://github.com/vuejs/jsx/tree/master/packages/babel-sugar-v-on",
   "author": "Nick Messing <dot.nick.dot.messing@gmail.com>",
   "license": "MIT",
   "private": false,

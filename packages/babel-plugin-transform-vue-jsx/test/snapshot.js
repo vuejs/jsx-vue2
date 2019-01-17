@@ -123,6 +123,45 @@ render(h => [h(Alpha, ["test"]), h("Beta", ["test"])]);`,
 }));`,
   },
   {
+    name: 'Special root attributes & prefix',
+    from: `render(h => (
+      <div
+        class="foo"
+        style="bar"
+        key="key"
+        ref="ref"
+        refInFor
+        slot="slot"
+        props-model={{"a":1}}
+        model={{
+          value: this.txt,
+          callback: $$v => {
+            this.txt = $$v
+          }
+        }}>
+      </div>
+    ))`,
+    to: `render(h => h("div", {
+  "class": "foo",
+  "style": "bar",
+  "key": "key",
+  "ref": "ref",
+  "refInFor": true,
+  "slot": "slot",
+  "props": {
+    "model": {
+      "a": 1
+    }
+  },
+  "model": {
+    value: this.txt,
+    callback: $$v => {
+      this.txt = $$v;
+    }
+  }
+}));`,
+  },
+  {
     name: 'Special snake-case attributes',
     from: `render(h => (
       <div

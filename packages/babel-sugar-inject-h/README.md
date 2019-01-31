@@ -39,7 +39,7 @@ export default {
   }
 }
 
-// Witho @vue/babel-sugar-inject-h
+// With @vue/babel-sugar-inject-h
 export default {
   render () {
     return <button />

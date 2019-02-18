@@ -325,6 +325,11 @@ h("MyComponent", _mergeJSXProps([{
   }
 }]));`,
   },
+  {
+    name: 'JSX comments',
+    from: `<div><p>jsx</p>{/* <p>comment</p> */}</div>`,
+    to: `h("div", [h("p", ["jsx"])]);`
+  }
 ]
 
 tests.forEach(({ name, from, to }) => test(name, async t => t.is(await transpile(from), to)))

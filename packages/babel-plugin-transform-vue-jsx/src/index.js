@@ -82,7 +82,7 @@ const getChildren = (t, paths) =>
       /* istanbul ignore next */
       throw new Error(`getChildren: ${path.type} is not supported`)
     })
-    .filter(el => el !== null)
+    .filter(el => el !== null && !t.isJSXEmptyExpression(el))
 
 /**
  * Add attribute to an attributes object

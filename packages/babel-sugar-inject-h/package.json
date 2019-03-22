@@ -1,6 +1,6 @@
 {
   "name": "@vue/babel-sugar-inject-h",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "description": "Babel syntactic sugar for h automatic injection for Vue JSX",
   "main": "dist/plugin.js",
   "repository": "https://github.com/vuejs/jsx/tree/master/packages/babel-sugar-inject-h",

@@ -1,6 +1,6 @@
 {
   "name": "@vue/babel-sugar-functional-vue",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "description": "Babel syntactic sugar for functional components",
   "main": "dist/plugin.js",
   "repository": "https://github.com/vuejs/jsx/tree/master/packages/babel-sugar-functional-vue",

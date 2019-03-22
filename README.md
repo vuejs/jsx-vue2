@@ -93,21 +93,27 @@ render() {
 named slots:
 
 ```jsx
-<MyComponent>
-  <header slot="header">header</header>
-  <footer slot="footer">footer</footer>
-</MyComponent>
+render() {
+  return (
+    <MyComponent>
+      <header slot="header">header</header>
+      <footer slot="footer">footer</footer>
+    </MyComponent>
+  )
+}
 ```
 
 scoped slots:
 
 ```jsx
-const scopedSlots = {
-  header: () => <header>header</header>,
-  footer: () => <footer>footer</footer>
-}
+render() {
+  const scopedSlots = {
+    header: () => <header>header</header>,
+    footer: () => <footer>footer</footer>
+  }
 
-<MyComponent scopedSlots={scopedSlots} />
+  return <MyComponent scopedSlots={scopedSlots} />
+}
 ```
 
 ### Directives

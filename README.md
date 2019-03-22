@@ -88,6 +88,28 @@ render() {
 }
 ```
 
+### Slots
+
+named slots:
+
+```jsx
+<MyComponent>
+  <header slot="header">header</header>
+  <footer slot="footer">footer</footer>
+</MyComponent>
+```
+
+scoped slots:
+
+```jsx
+const scopedSlots = {
+  header: () => <header>header</header>,
+  footer: () => <footer>footer</footer>
+}
+
+<MyComponent scopedSlots={scopedSlots} />
+```
+
 ### Directives
 
 ```jsx
@@ -110,6 +132,12 @@ with an argument and modifiers:
 
 ```jsx
 <input vOn:click_stop_prevent="newTodoText" />
+```
+
+v-html:
+
+```jsx
+<p domPropsInnerHTML={html} />
 ```
 
 ### Functional Components

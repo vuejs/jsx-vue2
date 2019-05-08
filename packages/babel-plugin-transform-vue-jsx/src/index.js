@@ -82,7 +82,7 @@ const getChildren = (t, paths) =>
       /* istanbul ignore next */
       throw new Error(`getChildren: ${path.type} is not supported`)
     })
-    .filter(el => el !== null)
+    .filter(el => el !== null && !t.isJSXEmptyExpression(el))
 
 /**
  * Add attribute to an attributes object
@@ -163,7 +163,7 @@ const parseAttributeJSXAttribute = (t, path, attributes, tagName, elementType) =
   }
 
   ;[name, ...modifiers] = name.split('_')
-  ;[name, argument] = name.split(':')
+    ;[name, argument] = name.split(':')
 
   prefix = prefixes.find(el => name.startsWith(el)) || 'attrs'
   name = name.replace(new RegExp(`^${prefix}\-?`), '')
@@ -196,6 +196,8 @@ const parseAttributeJSXAttribute = (t, path, attributes, tagName, elementType) =
     if (isDirective(name)) {
       name = kebabcase(name.substr(1))
       prefix = 'directives'
+    } else {
+      name = [name, ...modifiers].join('_')
     }
     if (name.match(xlinkRE)) {
       name = name.replace(xlinkRE, (_, firstCharacter) => {
@@ -299,15 +301,15 @@ const transformDirectives = (t, directives) =>
           : []),
         ...(directive.value._modifiers && directive.value._modifiers.length > 0
           ? [
-              t.objectProperty(
-                t.identifier('modifiers'),
-                t.objectExpression(
-                  directive.value._modifiers.map(modifier =>
-                    t.objectProperty(t.stringLiteral(modifier), t.booleanLiteral(true)),
-                  ),
+            t.objectProperty(
+              t.identifier('modifiers'),
+              t.objectExpression(
+                directive.value._modifiers.map(modifier =>
+                  t.objectProperty(t.stringLiteral(modifier), t.booleanLiteral(true)),
                 ),
               ),
-            ]
+            ),
+          ]
           : []),
       ]),
     ),

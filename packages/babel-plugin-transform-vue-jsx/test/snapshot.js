@@ -325,6 +325,21 @@ h("MyComponent", _mergeJSXProps([{
   }
 }]));`,
   },
+  {
+    name: 'JSX comments',
+    from: `<div><p>jsx</p>{/* <p>comment</p> */}</div>`,
+    to: `h("div", [h("p", ["jsx"])]);`
+  },
+  {
+    name: 'Underscore Props',
+    from: `const MyComp = {}; render(h => <MyComponent attrs-my_prop="test">test</MyComponent>)`,
+    to: `const MyComp = {};
+render(h => h("MyComponent", {
+  "attrs": {
+    "my_prop": "test"
+  }
+}, ["test"]));`,
+  }
 ]
 
 tests.forEach(({ name, from, to }) => test(name, async t => t.is(await transpile(from), to)))

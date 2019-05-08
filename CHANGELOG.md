@@ -1,3 +1,24 @@
+# [1.0.0](https://github.com/vuejs/jsx/compare/v1.0.0-beta.3...v1.0.0) (2019-05-08)
+
+## other
+
+#### Bug Fixes
+
+* Support props with underscore, close [#55](https://github.com/vuejs/jsx/issues/55) ([852481c](https://github.com/vuejs/jsx/commit/852481c))
+
+
+
+# [1.0.0-beta.3](https://github.com/vuejs/jsx/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2019-03-22)
+
+## other
+
+#### Bug Fixes
+
+* filter out jsx comments in `getChildren` ([7f0c84c](https://github.com/vuejs/jsx/commit/7f0c84c)), closes [#46](https://github.com/vuejs/jsx/issues/46)
+* fix incorrect repository urls ([99380b3](https://github.com/vuejs/jsx/commit/99380b3))
+
+
+
 # [1.0.0-beta.2](https://github.com/vuejs/jsx/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2019-01-11)
 
 ## other

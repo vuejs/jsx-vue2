@@ -1,9 +1,9 @@
 {
   "name": "@vue/babel-sugar-v-model",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0",
   "description": "Babel syntactic sugar for v-model support in Vue JSX",
   "main": "dist/plugin.js",
-  "repository": "https://github.com/vuejs/jsx/tree/master/packages/babel-sugar-event-modifiers",
+  "repository": "https://github.com/vuejs/jsx/tree/master/packages/babel-sugar-v-model",
   "author": "Nick Messing <dot.nick.dot.messing@gmail.com>",
   "license": "MIT",
   "private": false,
@@ -36,8 +36,8 @@
   },
   "dependencies": {
     "@babel/plugin-syntax-jsx": "^7.2.0",
-    "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0-beta.2",
-    "@vue/babel-plugin-transform-vue-jsx": "^1.0.0-beta.2",
+    "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",
+    "@vue/babel-plugin-transform-vue-jsx": "^1.0.0",
     "camelcase": "^5.0.0",
     "html-tags": "^2.0.0",
     "svg-tags": "^1.0.0"

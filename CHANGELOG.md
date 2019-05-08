@@ -1,3 +1,13 @@
+# [1.0.0](https://github.com/vuejs/jsx/compare/v1.0.0-beta.3...v1.0.0) (2019-05-08)
+
+## other
+
+#### Bug Fixes
+
+* Support props with underscore, close [#55](https://github.com/vuejs/jsx/issues/55) ([852481c](https://github.com/vuejs/jsx/commit/852481c))
+
+
+
 # [1.0.0-beta.3](https://github.com/vuejs/jsx/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2019-03-22)
 
 ## other

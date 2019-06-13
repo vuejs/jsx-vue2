@@ -183,15 +183,27 @@ export default function(babel) {
               .reduce((acc, item) => (acc ? or(acc, item) : item)),
           ),
         )
-      } else if (key === 'capture') {
-        event = '!' + event
-      } else if (key === 'once') {
-        event = '~' + event
+      } else if (key === 'capture' || key === 'once' || key === 'passive') {
+        continue
       } else if (key === 'native') {
         isNative = true
       } else {
         keys.push(key)
       }
+    }
+
+    // vue has special order of capture/once/passive with
+    // modifier markers
+    // SEE
+    // https://github.com/vuejs/vue/blob/4c98f9de39e18703ec3dbd05b596a1bbc3d0c8e3/src/compiler/helpers.js#L111
+    if (modifiers.indexOf('capture') > -1) {
+      event = '!' + event
+    }
+    if (modifiers.indexOf('once') > -1) {
+      event = '~' + event
+    }
+    if (modifiers.indexOf('passive') > -1) {
+      event = '&' + event
     }
 
     if (keys.length) {
@@ -251,7 +263,7 @@ export default function(babel) {
   }
 
   function addEvent(event, expression, isNative, attributes) {
-    if (event[0] !== '~' && event[0] !== '!') {
+    if (event[0] !== '~' && event[0] !== '!' && event[0] !== '&') {
       attributes.push(
         t.jSXAttribute(
           t.jSXIdentifier(`${isNative ? 'nativeOn' : 'on'}-${event}`),

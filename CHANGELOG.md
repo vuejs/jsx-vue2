@@ -1,3 +1,13 @@
+# [1.1.0](https://github.com/vuejs/jsx/compare/v1.0.0...v1.1.0) (2019-07-23)
+
+## other
+
+#### Bug Fixes
+
+* support for `.passive` modifier ([01177c8](https://github.com/vuejs/jsx/commit/01177c8))
+
+
+
 # [1.0.0](https://github.com/vuejs/jsx/compare/v1.0.0-beta.3...v1.0.0) (2019-05-08)
 
 ## other

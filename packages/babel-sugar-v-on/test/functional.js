@@ -209,6 +209,106 @@ test('should support once and other modifiers', t => {
   t.is(stub.calls.length, 1)
 })
 
+test('should support passive', t => {
+  const arr = []
+  const wrapper = mount({
+    methods: {
+      foo(e) {
+        arr.push(e.defaultPrevented) // will be false
+        e.preventDefault()
+        arr.push(e.defaultPrevented) // will be true
+      },
+      bar(e) {
+        arr.push(e.defaultPrevented) // will be false
+        e.preventDefault() // does nothing since the listener is passive
+        arr.push(e.defaultPrevented) // still false
+      },
+    },
+    render(h) {
+      return (
+        <section>
+          <div vOn:click={this.foo} />
+          <div vOn:click_passive={this.bar} />
+        </section>
+      )
+    },
+  })
+  const divs = wrapper.findAll('div')
+  divs.at(0).trigger('click')
+  divs.at(1).trigger('click')
+  t.deepEqual(arr, [false, true, false, false])
+})
+
+test('should support passive and once', t => {
+  const arr = []
+  const wrapper = mount({
+    methods: {
+      bar(e) {
+        arr.push(e.defaultPrevented) // will be false
+        e.preventDefault() // does nothing since the listener is passive
+        arr.push(e.defaultPrevented) // still false
+      },
+    },
+    render(h) {
+      return <div vOn:click_passive_once={this.bar} />
+    },
+  })
+
+  wrapper.trigger('click')
+  t.deepEqual(arr, [false, false])
+
+  wrapper.trigger('click')
+  t.deepEqual(arr, [false, false])
+})
+
+test('should support passive and other modifiers', t => {
+  const arr = []
+  const wrapper = mount({
+    methods: {
+      bar(e) {
+        arr.push(e.defaultPrevented) // will be false
+        e.preventDefault() // does nothing since the listener is passive
+        arr.push(e.defaultPrevented) // still false
+      },
+    },
+    render(h) {
+      return (
+        <section vOn:click_passive_self={this.bar}>
+          <div />
+        </section>
+      )
+    },
+  })
+
+  wrapper.trigger('click')
+  t.deepEqual(arr, [false, false])
+
+  wrapper.find('div').trigger('click')
+  t.deepEqual(arr, [false, false])
+})
+
+test("should respect vue' order on special modifer markers", t => {
+  // This test is especially for `.passive` working with other modifiers
+  const fn = t.context.stub()
+  const FC = h => (
+    <section>
+      <div vOn:click_once_passive={fn} />
+      <div vOn:click_passive_once={fn} />
+      <div vOn:click_passive_capture={fn} />
+      <div vOn:click_capture_passive={fn} />
+    </section>
+  )
+
+  const mockCreateElement = (tag, props, children) => {
+    if (tag === 'div') {
+      // `&` is always the first if `.passive` present
+      t.is(Object.keys(props.on)[0].indexOf('&'), 0)
+    }
+  }
+
+  FC(mockCreateElement)
+})
+
 test('should support keyCode', t => {
   const stub = t.context.stub()
   const wrapper = mount({

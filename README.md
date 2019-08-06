@@ -52,7 +52,7 @@ import MyComponent from './my-component'
 export default {
   render() {
     return <MyComponent>hello</MyComponent>
-  }
+  },
 }
 ```
 
@@ -119,25 +119,25 @@ render() {
 ### Directives
 
 ```jsx
-<input vModel="newTodoText" />
+<input vModel={this.newTodoText} />
 ```
 
 with a modifier:
 
 ```jsx
-<input vModel_trim="newTodoText" />
+<input vModel_trim={this.newTodoText} />
 ```
 
 with an argument:
 
 ```jsx
-<input vOn:click="newTodoText" />
+<input vOn:click={this.newTodoText} />
 ```
 
 with an argument and modifiers:
 
 ```jsx
-<input vOn:click_stop_prevent="newTodoText" />
+<input vOn:click_stop_prevent={this.newTodoText} />
 ```
 
 v-html:
@@ -151,13 +151,13 @@ v-html:
 Transpiles arrow functions that return JSX into functional components, when they are either default exports:
 
 ```jsx
-export default ({ props }) => <p>hello { props.message }</p>
+export default ({ props }) => <p>hello {props.message}</p>
 ```
 
 or PascalCase variable declarations:
 
 ```jsx
-const HelloWorld = ({ props }) => <p>hello { props.message }</p>
+const HelloWorld = ({ props }) => <p>hello {props.message}</p>
 ```
 
 ## Compatibility

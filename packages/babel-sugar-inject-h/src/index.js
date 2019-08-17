@@ -1,5 +1,7 @@
 import syntaxJsx from '@babel/plugin-syntax-jsx'
 
+const entry = 'vue-function-api'
+
 /**
  * Check if first parameter is `h`
  * @param t
@@ -62,6 +64,7 @@ export default babel => {
             }
 
             const isRender = path.node.key.name === 'render'
+            const isSetup = path.type === 'ObjectMethod' && path.node.key.name === 'setup'
 
             path
               .get('body')
@@ -70,7 +73,12 @@ export default babel => {
                 t.variableDeclaration('const', [
                   t.variableDeclarator(
                     t.identifier('h'),
-                    isRender
+                    isSetup
+                      ? t.memberExpression(
+                          t.callExpression(t.identifier('require'), [t.stringLiteral(entry)]),
+                          t.identifier('createElement'),
+                        )
+                      : isRender
                       ? t.memberExpression(t.identifier('arguments'), t.numericLiteral(0), true)
                       : t.memberExpression(t.thisExpression(), t.identifier('$createElement')),
                   ),

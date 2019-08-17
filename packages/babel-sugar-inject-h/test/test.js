@@ -103,6 +103,22 @@ const tests = [
 
 };`,
   },
+  {
+    name: 'Simple injection in object setup methods',
+    from: `const obj = {
+      setup() {
+        return () => <div>test</div>
+      }
+    }`,
+    to: `const obj = {
+  setup() {
+    const h = require("vue-function-api").createElement;
+
+    return () => <div>test</div>;
+  }
+
+};`,
+  },
 ]
 
 tests.forEach(({ name, from, to }) => test(name, async t => t.is(await transpile(from), to)))

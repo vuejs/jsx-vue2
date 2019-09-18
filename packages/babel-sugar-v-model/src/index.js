@@ -181,12 +181,18 @@ const addProp = (t, path, propName, expression, unshift = false) => {
  * @param valueExpression Expression
  */
 const genAssignmentCode = (t, valuePath, valueExpression) => {
-  if (t.isMemberExpression(valuePath) && valuePath.node.computed) {
-    return t.callExpression(t.memberExpression(t.thisExpression(), t.identifier('$set')), [
-      valuePath.get('object').node,
-      valuePath.get('property').node,
-      valueExpression,
-    ])
+  let obj
+  if (t.isMemberExpression(valuePath) && !t.isThisExpression(obj = valuePath.get('object').node)) {
+    return t.callExpression(
+      t.memberExpression(t.thisExpression(), t.identifier('$set')),
+      [
+        obj,
+        valuePath.node.computed
+          ? valuePath.get('property').node
+          : t.stringLiteral(valuePath.get('property.name').node),
+        valueExpression
+      ]
+    );
   } else {
     return t.assignmentExpression('=', valuePath.node, valueExpression)
   }

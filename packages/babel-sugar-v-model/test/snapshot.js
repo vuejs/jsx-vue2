@@ -30,7 +30,7 @@ const tests = [
     to: `const A = <MyComponent model={{
   value: a.b,
   callback: $$v => {
-    a.b = $$v;
+    this.$set(a, "b", $$v);
   }
 }} />;`,
   },
@@ -40,7 +40,7 @@ const tests = [
     to: `const A = <my-component model={{
   value: a.b,
   callback: $$v => {
-    a.b = $$v;
+    this.$set(a, "b", $$v);
   }
 }} />;`,
   },
@@ -50,7 +50,7 @@ const tests = [
     to: `const A = <a.b model={{
   value: a.b,
   callback: $$v => {
-    a.b = $$v;
+    this.$set(a, "b", $$v);
   }
 }} />;`,
   },
@@ -60,7 +60,7 @@ const tests = [
     to: `const A = <MyComponent model={{
   value: a.b,
   callback: $$v => {
-    a.b = this._n($$v);
+    this.$set(a, "b", this._n($$v));
   }
 }} />;`,
   },
@@ -70,7 +70,7 @@ const tests = [
     to: `const A = <MyComponent model={{
   value: a.b,
   callback: $$v => {
-    a.b = typeof $$v === "string" ? $$v.trim() : $$v;
+    this.$set(a, "b", typeof $$v === "string" ? $$v.trim() : $$v);
   }
 }} />;`,
   },
@@ -80,7 +80,7 @@ const tests = [
     to: `const A = <MyComponent model={{
   value: a.b,
   callback: $$v => {
-    a.b = this._n(typeof $$v === "string" ? $$v.trim() : $$v);
+    this.$set(a, "b", this._n(typeof $$v === "string" ? $$v.trim() : $$v));
   }
 }} />;`,
   },
@@ -99,7 +99,7 @@ const tests = [
     from: `const A = <select vModel={a.b} />`,
     to: `const A = <select on-change={$event => {
   const $$selectedVal = Array.prototype.filter.call($event.target.options, o => o.selected).map(o => "_value" in o ? o._value : o.value);
-  a.b = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
+  this.$set(a, "b", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
 }} {...{
   directives: [{
     name: "model",
@@ -113,7 +113,7 @@ const tests = [
     from: `const A = <select vModel_number={a.b} />`,
     to: `const A = <select on-change={$event => {
   const $$selectedVal = Array.prototype.filter.call($event.target.options, o => o.selected).map(o => this._n("_value" in o ? o._value : o.value));
-  a.b = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
+  this.$set(a, "b", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
 }} {...{
   directives: [{
     name: "model",
@@ -137,12 +137,12 @@ const tests = [
           $$i = this._i($$a, $$v);
 
     if ($$el.checked) {
-      $$i < 0 && (a.b = $$a.concat([$$v]));
+      $$i < 0 && this.$set(a, "b", $$a.concat([$$v]));
     } else {
-      $$i > -1 && (a.b = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+      $$i > -1 && this.$set(a, "b", $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
     }
   } else {
-    a.b = $$c;
+    this.$set(a, "b", $$c);
   }
 }} type="checkbox" domProps-checked={Array.isArray(a.b) ? this._i(a.b, null) > -1 : a.b} {...{
   directives: [{
@@ -165,12 +165,12 @@ const tests = [
           $$i = this._i($$a, $$v);
 
     if ($$el.checked) {
-      $$i < 0 && (a.b = $$a.concat([$$v]));
+      $$i < 0 && this.$set(a, "b", $$a.concat([$$v]));
     } else {
-      $$i > -1 && (a.b = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+      $$i > -1 && this.$set(a, "b", $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
     }
   } else {
-    a.b = $$c;
+    this.$set(a, "b", $$c);
   }
 }} type="checkbox" domProps-checked={Array.isArray(a.b) ? this._i(a.b, null) > -1 : a.b} {...{
   directives: [{
@@ -195,12 +195,12 @@ const tests = [
           $$i = this._i($$a, $$v);
 
     if ($$el.checked) {
-      $$i < 0 && (a.b = $$a.concat([$$v]));
+      $$i < 0 && this.$set(a, "b", $$a.concat([$$v]));
     } else {
-      $$i > -1 && (a.b = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+      $$i > -1 && this.$set(a, "b", $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
     }
   } else {
-    a.b = $$c;
+    this.$set(a, "b", $$c);
   }
 }} type="checkbox" domProps-checked={Array.isArray(a.b) ? this._i(a.b, "abc") > -1 : this._q(a.b, trueVal)} {...{
   directives: [{
@@ -214,7 +214,7 @@ const tests = [
     name: 'Generic input[type="radio"] vModel',
     from: `const A = <input type="radio" vModel={a.b} />`,
     to: `const A = <input on-change={$event => {
-  a.b = null;
+  this.$set(a, "b", null);
 }} type="radio" domProps-checked={this._q(a.b, null)} {...{
   directives: [{
     name: "model",
@@ -227,7 +227,7 @@ const tests = [
     name: 'input[type="radio"] vModel_number',
     from: `const A = <input type="radio" vModel_number={a.b} value="10" />`,
     to: `const A = <input on-change={$event => {
-  a.b = this._n("10");
+  this.$set(a, "b", this._n("10"));
 }} type="radio" domProps-checked={this._q(a.b, this._n("10"))} {...{
   directives: [{
     name: "model",
@@ -243,7 +243,7 @@ const tests = [
     from: `const A = <input type="text" vModel={a.b} />`,
     to: `const A = <input on-input={$event => {
   if ($event.target.composing) return;
-  a.b = $event.target.value;
+  this.$set(a, "b", $event.target.value);
 }} type="text" domProps-value={a.b} {...{
   directives: [{
     name: "model",
@@ -257,7 +257,7 @@ const tests = [
     from: `const A = <textarea vModel={a.b} />`,
     to: `const A = <textarea on-input={$event => {
   if ($event.target.composing) return;
-  a.b = $event.target.value;
+  this.$set(a, "b", $event.target.value);
 }} domProps-value={a.b} {...{
   directives: [{
     name: "model",
@@ -272,7 +272,7 @@ const tests = [
     to: `const A = <input on-blur={$event => {
   this.$forceUpdate();
 }} on-change={$event => {
-  a.b = this._n($event.target.value.trim());
+  this.$set(a, "b", this._n($event.target.value.trim()));
 }} type="text" domProps-value={a.b} {...{
   directives: [{
     name: "model",
@@ -289,7 +289,7 @@ const tests = [
     name: 'input[type="range"] vModel',
     from: `const A = <input type="range" vModel={a.b} />`,
     to: `const A = <input on-__r={$event => {
-  a.b = $event.target.value;
+  this.$set(a, "b", $event.target.value);
 }} type="range" domProps-value={a.b} {...{
   directives: [{
     name: "model",

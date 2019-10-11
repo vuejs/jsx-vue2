@@ -1,3 +1,13 @@
+# [1.1.1](https://github.com/vuejs/jsx/compare/v1.1.0...v1.1.1) (2019-10-11)
+
+## other
+
+#### Bug Fixes
+
+* **v-model:** create non-existent properties as reactive ([05b9b3a](https://github.com/vuejs/jsx/commit/05b9b3a))
+
+
+
 # [1.1.0](https://github.com/vuejs/jsx/compare/v1.0.0...v1.1.0) (2019-07-23)
 
 ## other

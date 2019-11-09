@@ -1,3 +1,13 @@
+# [1.1.2](https://github.com/vuejs/jsx/compare/v1.1.1...v1.1.2) (2019-11-09)
+
+## other
+
+#### Bug Fixes
+
+* add [@babel](https://github.com/babel)/core to peerDependencies ([f60f316](https://github.com/vuejs/jsx/commit/f60f316))
+
+
+
 # [1.1.1](https://github.com/vuejs/jsx/compare/v1.1.0...v1.1.1) (2019-10-11)
 
 ## other

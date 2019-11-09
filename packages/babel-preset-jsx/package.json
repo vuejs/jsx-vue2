@@ -23,5 +23,8 @@
   "devDependencies": {
     "rollup": "^0.67.4",
     "rollup-plugin-babel-minify": "^6.2.0"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
   }
 }

@@ -40,6 +40,9 @@
     "@vue/babel-plugin-transform-vue-jsx": "^1.0.0",
     "camelcase": "^5.0.0"
   },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  },
   "nyc": {
     "exclude": [
       "dist",

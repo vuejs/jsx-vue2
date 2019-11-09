@@ -42,6 +42,9 @@
     "lodash.kebabcase": "^4.1.1",
     "svg-tags": "^1.0.0"
   },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  },
   "nyc": {
     "exclude": [
       "dist",

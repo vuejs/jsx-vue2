@@ -75,9 +75,8 @@ const getChildren = (t, paths) =>
       if (path.isJSXSpreadChild()) {
         return transformJSXSpreadChild(t, path)
       }
-      /* istanbul ignore else */
-      if (path.isJSXElement()) {
-        return transformJSXElement(t, path)
+      if (path.isCallExpression()) {
+        return path.node
       }
       /* istanbul ignore next */
       throw new Error(`getChildren: ${path.type} is not supported`)
@@ -339,6 +338,9 @@ const transformAttributes = (t, attributes) =>
  * @returns CallExpression
  */
 const transformJSXElement = (t, path) => {
+  if (t.isJSXAttribute(path.container)) {
+    throw new Error(`getAttributes (attribute value): ${path.type} is not supported`)
+  }
   const tag = getTag(t, path.get('openingElement'))
   const children = getChildren(t, path.get('children'))
   const openingElementPath = path.get('openingElement')
@@ -451,8 +453,10 @@ export default babel => {
     name: 'babel-plugin-transform-vue-jsx',
     inherits: syntaxJsx,
     visitor: {
-      JSXElement(path) {
-        path.replaceWith(transformJSXElement(t, path))
+      JSXElement: {
+        exit(path) {
+          path.replaceWith(transformJSXElement(t, path))
+        },
       },
     },
   }

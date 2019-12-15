@@ -96,11 +96,37 @@ const tests = [
       }
     }`,
     to: `const obj = {
-  render() {
-    const h = arguments[0];
+  render(h) {
     return <div>test</div>;
   }
 
+};`,
+  },
+  {
+    name: 'Arrow function',
+    from: `const obj = {
+      render: (foo) => <div>test</div>
+    }`,
+    to: `const obj = {
+  render: (h, foo) => <div>test</div>
+};`,
+  },
+  {
+    name: 'Function declaration',
+    from: `function foo(bar) {
+      return <div>test</div>;
+    }`,
+    to: `function foo(h, bar) {
+  return <div>test</div>;
+}`,
+  },
+  {
+    name: 'Function expression',
+    from: `const foo = function (bar) {
+      return <div>test</div>;
+    };`,
+    to: `const foo = function (h, bar) {
+  return <div>test</div>;
 };`,
   },
 ]

@@ -56,26 +56,28 @@ export default babel => {
     visitor: {
       Program(path) {
         path.traverse({
-          'ObjectMethod|ClassMethod'(path) {
+          'Function'(path) {
             if (firstParamIsH(t, path) || !hasJSX(t, path) || isInsideJSXExpression(t, path)) {
               return
             }
 
-            const isRender = path.node.key.name === 'render'
+            const isAddParameter = path.node.key === undefined || path.node.key.name === 'render'
 
-            path
-              .get('body')
-              .unshiftContainer(
-                'body',
-                t.variableDeclaration('const', [
-                  t.variableDeclarator(
-                    t.identifier('h'),
-                    isRender
-                      ? t.memberExpression(t.identifier('arguments'), t.numericLiteral(0), true)
-                      : t.memberExpression(t.thisExpression(), t.identifier('$createElement')),
-                  ),
-                ]),
-              )
+            if (isAddParameter) {
+              path.node.params = [t.identifier('h'), ...path.node.params]
+            } else {
+              path
+                .get('body')
+                .unshiftContainer(
+                  'body',
+                  t.variableDeclaration('const', [
+                    t.variableDeclarator(
+                      t.identifier('h'),
+                      t.memberExpression(t.thisExpression(), t.identifier('$createElement')),
+                    ),
+                  ]),
+                )
+            }
           },
         })
       },

@@ -24,21 +24,19 @@ export default function(babel) {
   return {
     inherits: syntaxJsx,
     visitor: {
-      Program(path) {
-        path.traverse({
-          JSXAttribute(path) {
-            const parsed = parseVModel(t, path)
-            if (!parsed) {
-              return
-            }
+      JSXAttribute: {
+        exit(path) {
+          const parsed = parseVModel(t, path)
+          if (!parsed) {
+            return
+          }
 
-            const { modifiers, valuePath } = parsed
+          const { modifiers, valuePath } = parsed
 
-            const parent = path.parentPath
-            transformModel(t, parent, valuePath, modifiers)
-            path.remove()
-          },
-        })
+          const parent = path.parentPath
+          transformModel(t, parent, valuePath, modifiers)
+          path.remove()
+        },
       },
     },
   }
@@ -182,17 +180,12 @@ const addProp = (t, path, propName, expression, unshift = false) => {
  */
 const genAssignmentCode = (t, valuePath, valueExpression) => {
   let obj
-  if (t.isMemberExpression(valuePath) && !t.isThisExpression(obj = valuePath.get('object').node)) {
-    return t.callExpression(
-      t.memberExpression(t.thisExpression(), t.identifier('$set')),
-      [
-        obj,
-        valuePath.node.computed
-          ? valuePath.get('property').node
-          : t.stringLiteral(valuePath.get('property.name').node),
-        valueExpression
-      ]
-    );
+  if (t.isMemberExpression(valuePath) && !t.isThisExpression((obj = valuePath.get('object').node))) {
+    return t.callExpression(t.memberExpression(t.thisExpression(), t.identifier('$set')), [
+      obj,
+      valuePath.node.computed ? valuePath.get('property').node : t.stringLiteral(valuePath.get('property.name').node),
+      valueExpression,
+    ])
   } else {
     return t.assignmentExpression('=', valuePath.node, valueExpression)
   }

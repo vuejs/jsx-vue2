@@ -1,5 +1,6 @@
 import test from 'ava'
 import { transform } from '@babel/core'
+import syntaxJsx from '@babel/plugin-syntax-jsx'
 import plugin from '../dist/plugin.testing'
 
 const transpile = src =>
@@ -356,3 +357,25 @@ test('JSXElement attribute value throws error', t =>
         resolve()
       })
   }))
+
+
+test('Allows prior plugins to traverse JSX tree throughly', t => {
+  let visited = 0;
+  const anotherPlugin = () => ({
+    name: 'babel-plugin-another',
+    inherits: syntaxJsx,
+    visitor: {
+      JSXElement(path) {
+        visited++;
+
+      }
+    }
+  })
+  return new Promise(resolve => {
+    transform(`render(h => <a><b/></a>)`,{ plugins: [anotherPlugin, plugin] }, (err) => {
+      if (err) t.fail()
+      t.is(visited, 2)
+      resolve();
+    })
+  })
+})

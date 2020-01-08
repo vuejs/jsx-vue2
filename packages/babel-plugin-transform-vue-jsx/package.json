@@ -1,0 +1,24 @@
+{
+  "name": "@vue/babel-plugin-transform-vue-jsx",
+  "version": "1.0.0",
+  "description": "Babel plugin for Vue 2.0 JSX",
+  "main": "dist/index.js",
+  "repository": "https://github.com/vuejs/jsx/tree/master/packages/babel-plugin-transform-vue-jsx",
+  "author": "Evan You",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "@babel/helper-module-imports": "^7.7.0",
+    "@babel/plugin-syntax-jsx": "^7.2.0",
+    "html-tags": "^3.1.0",
+    "lodash.kebabcase": "^4.1.1",
+    "svg-tags": "^1.0.0",
+    "typescript": "^3.7.2"
+  },
+  "devDependencies": {
+    "@babel/types": "^7.7.2",
+    "@types/babel__core": "^7.1.3",
+    "@types/babel__traverse": "^7.0.7",
+    "@types/lodash.kebabcase": "^4.1.6"
+  }
+}

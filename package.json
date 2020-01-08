@@ -1,0 +1,10 @@
+{
+  "name": "root",
+  "private": true,
+  "devDependencies": {
+    "lerna": "^3.18.4"
+  },
+  "dependencies": {
+    "lodash.debounce": "^4.0.8"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "babel-sugar-functional-vue",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/plugin-syntax-jsx": "^7.7.4",
+    "@babel/types": "^7.7.4",
+    "typescript": "^3.7.2"
+  },
+  "devDependencies": {
+    "@types/babel__core": "^7.1.3",
+    "@types/babel__traverse": "^7.0.8"
+  }
+}

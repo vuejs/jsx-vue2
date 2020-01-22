@@ -165,6 +165,13 @@ const parseAttributeJSXAttribute = (t, path, attributes, tagName, elementType) =
     ;[name, argument] = name.split(':')
 
   prefix = prefixes.find(el => name.startsWith(el)) || 'attrs'
+
+  // For custom components(which tag name is not html tag), event binding need to use `nativeOn` but not `on`
+  // `on` prefix should transfrom to `attrs`
+  if (!htmlTags.includes(tagName) && prefix === 'on') {
+    prefix = 'attrs'
+  }
+
   name = name.replace(new RegExp(`^${prefix}\-?`), '')
 
   // in jsx, event binding use Camel case, such as `onClick`, `onMouseDown`;

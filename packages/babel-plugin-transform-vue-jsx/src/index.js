@@ -167,7 +167,7 @@ const parseAttributeJSXAttribute = (t, path, attributes, tagName, elementType) =
   prefix = prefixes.find(el => name.startsWith(el)) || 'attrs'
 
   // For custom components(which tag name is not html tag), event binding need to use `nativeOn` but not `on`
-  // `on` prefix should transfrom to `attrs`
+  // `on` prefix should transform to `attrs`
   if (!htmlTags.includes(tagName) && prefix === 'on') {
     prefix = 'attrs'
   }

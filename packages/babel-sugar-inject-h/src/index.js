@@ -19,13 +19,19 @@ const firstParamIsH = (t, path) => {
  */
 const hasJSX = (t, path) => {
   const JSXChecker = {
+    hasInnerFunction: false,
     hasJSX: false,
   }
   path.traverse(
     {
       JSXElement() {
-        this.hasJSX = true
+        if (!this.hasInnerFunction) {
+          this.hasJSX = true
+        }
       },
+      Function() {
+        this.hasInnerFunction = true
+      }
     },
     JSXChecker,
   )

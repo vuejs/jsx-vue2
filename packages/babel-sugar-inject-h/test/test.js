@@ -112,6 +112,15 @@ const tests = [
 };`,
   },
   {
+    name: 'Nested arrow functions',
+    from: `const func = () => ({
+      render: (foo) => <div>test</div>
+    })`,
+    to: `const func = () => ({
+  render: (h, foo) => <div>test</div>
+});`,
+  },
+  {
     name: 'Function declaration',
     from: `function foo(bar) {
       return <div>test</div>;

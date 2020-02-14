@@ -7,7 +7,7 @@ Configurable Babel preset to add Vue JSX support. See the [configuration options
 Install the preset with:
 
 ```bash
-npm install @vue/babel-preset-jsx @vue/babel-helper-vue-jsx-merge-props
+npm i @vue/babel-preset-jsx @vue/babel-helper-vue-jsx-merge-props
 ```
 
 Then add the preset to `.babelrc`:

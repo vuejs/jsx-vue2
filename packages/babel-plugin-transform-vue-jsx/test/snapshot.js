@@ -353,7 +353,7 @@ test('JSXElement attribute value throws error', t =>
         resolve()
       })
       .catch(e => {
-        t.is(e.message, 'getAttributes (attribute value): JSXElement is not supported')
+        t.regex(e.message, /getAttributes \(attribute value\): JSXElement is not supported/)
         resolve()
       })
   }))

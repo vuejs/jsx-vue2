@@ -4,8 +4,9 @@ jobs:
     docker:
       # specify the version you desire here
       - image: vuejs/ci
+        user: node
 
-    working_directory: ~/repo
+    working_directory: /home/node/repo
 
     steps:
       - checkout
@@ -13,15 +14,15 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "yarn.lock" }}
+            - v2-dependencies-{{ checksum "yarn.lock" }}
 
-      - run: yarn install
+      - run: yarn install --pure-lockfile
 
       - save_cache:
           paths:
             - node_modules
             - ~/.cache/yarn
-          key: v1-dependencies-{{ checksum "yarn.lock" }}
+          key: v2-dependencies-{{ checksum "yarn.lock" }}
 
       # run tests!
       - run: yarn test

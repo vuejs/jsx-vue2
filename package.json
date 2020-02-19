@@ -14,6 +14,6 @@
     "@vue/conventional-changelog": "^0.1.1",
     "conventional-changelog": "^2.0.3",
     "execa": "^1.0.0",
-    "lerna": "^3.5.1"
+    "lerna": "3.5.1"
   }
 }

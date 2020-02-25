@@ -27,8 +27,7 @@ const tests = [
       }
     }`,
     to: `const obj = {
-  method() {
-    const h = this.$createElement;
+  method(h) {
     return <div>test</div>;
   }
 
@@ -46,8 +45,7 @@ const tests = [
       }
     }`,
     to: `const obj = {
-  method() {
-    const h = this.$createElement;
+  method(h) {
     return <div foo={{
       render() {
         return <div>bar</div>;
@@ -66,8 +64,7 @@ const tests = [
       }
     }`,
     to: `const obj = {
-  get method() {
-    const h = this.$createElement;
+  get method(h) {
     return <div>test</div>;
   }
 
@@ -81,8 +78,7 @@ const tests = [
       }
     }`,
     to: `const obj = {
-  method(hey) {
-    const h = this.$createElement;
+  method(h, hey) {
     return <div>test</div>;
   }
 
@@ -110,15 +106,6 @@ const tests = [
     to: `const obj = {
   render: (h, foo) => <div>test</div>
 };`,
-  },
-  {
-    name: 'Nested arrow functions',
-    from: `const func = () => ({
-      render: (foo) => <div>test</div>
-    })`,
-    to: `const func = () => ({
-  render: (h, foo) => <div>test</div>
-});`,
   },
   {
     name: 'Function declaration',

@@ -19,19 +19,13 @@ const firstParamIsH = (t, path) => {
  */
 const hasJSX = (t, path) => {
   const JSXChecker = {
-    hasInnerFunction: false,
     hasJSX: false,
   }
   path.traverse(
     {
       JSXElement() {
-        if (!this.hasInnerFunction) {
-          this.hasJSX = true
-        }
+        this.hasJSX = true
       },
-      Function() {
-        this.hasInnerFunction = true
-      }
     },
     JSXChecker,
   )
@@ -67,23 +61,7 @@ export default babel => {
               return
             }
 
-            const isAddParameter = path.node.key === undefined || path.node.key.name === 'render'
-
-            if (isAddParameter) {
-              path.node.params = [t.identifier('h'), ...path.node.params]
-            } else {
-              path
-                .get('body')
-                .unshiftContainer(
-                  'body',
-                  t.variableDeclaration('const', [
-                    t.variableDeclarator(
-                      t.identifier('h'),
-                      t.memberExpression(t.thisExpression(), t.identifier('$createElement')),
-                    ),
-                  ]),
-                )
-            }
+            path.node.params = [t.identifier('h'), ...path.node.params]
           },
         })
       },

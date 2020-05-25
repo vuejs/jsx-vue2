@@ -2,6 +2,13 @@
 
 Configurable Babel preset to add Vue JSX support. See the [configuration options here](./packages/babel-preset-jsx).
 
+## Compatibility
+
+This repo is only compatible with:
+
+- **Babel 7+**. For Babel 6 support, use [vuejs/babel-plugin-transform-vue-jsx](https://github.com/vuejs/babel-plugin-transform-vue-jsx)
+- **Vue 2+**. JSX is not supported for older versions. For Vue 3 support, there is an experimental plugin available as [@ant-design-vue/babel-plugin-jsx](https://github.com/vueComponent/jsx).
+
 ## Installation
 
 Install the preset with:
@@ -159,10 +166,3 @@ or PascalCase variable declarations:
 ```jsx
 const HelloWorld = ({ props }) => <p>hello {props.message}</p>
 ```
-
-## Compatibility
-
-This repo is only compatible with:
-
-- **Babel 7+**. For Babel 6 support, use [vuejs/babel-plugin-transform-vue-jsx](https://github.com/vuejs/babel-plugin-transform-vue-jsx)
-- **Vue 2+**. JSX is not supported for older versions.

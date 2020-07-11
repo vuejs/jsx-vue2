@@ -11,9 +11,9 @@ export default (_, { functional = true, injectH = true, vModel = true, vOn = tru
     plugins: [
       functional && babelSugarFunctionalVue,
       injectH && (compositionAPI ? babelSugarCompositionApiInjectH : babelSugarInjectH),
-      compositionAPI && babelSugarCompositionApiRenderInstance,
       vModel && babelSugarVModel,
       vOn && babelSugarVOn,
+      compositionAPI && babelSugarCompositionApiRenderInstance,
       babelPluginTransformVueJsx,
     ].filter(Boolean),
   }

@@ -2,7 +2,7 @@
 
 > Ported from [luwanquan/babel-preset-vca-jsx](https://github.com/luwanquan/babel-preset-vca-jsx) by [@luwanquan](https://github.com/luwanquan)
 
-Babel syntactic sugar for replaceing `this` with `getCurrentInstance()` in Vue JSX with @vue/composition-api
+Babel syntactic sugar for replacing `this` with `getCurrentInstance()` in Vue JSX with @vue/composition-api
 
 ### Babel Compatibility Notes
 

@@ -31,7 +31,7 @@ However it is recommended to use the [configurable preset](../babel-preset-jsx/R
 
 ### Details
 
-This plugin automatically injects `h` in every method that has JSX. By using this plugin you don't have to always specifically declare `h` as first parameter in your `render()` function.
+This plugin automatically injects `h` in every method that has JSX. By using this plugin you don't have to always import `h` from `@vue/composition-api`.
 
 ```js
 // Without @vue/babel-sugar-inject-h
@@ -42,7 +42,9 @@ export default {
     return () => <button />
   },
 }
+```
 
+```js
 // With @vue/babel-sugar-inject-h
 export default {
   setup() {

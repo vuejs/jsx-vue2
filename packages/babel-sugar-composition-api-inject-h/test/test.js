@@ -161,7 +161,6 @@ const obj = {
   const obj = {
     setup2() {
       var h = this.$createElement;
-      const h = this.$createElement;
       return () => {
         return <div>test</div>
       }
@@ -171,7 +170,6 @@ const obj = {
 const obj = {
   setup2() {
     var h = this.$createElement;
-    const h = this.$createElement;
     return () => {
       return <div>test</div>;
     };

@@ -26,17 +26,19 @@ export default ({ types: t }) => {
     visitor: {
       Program(p) {
         p.traverse({
-          'ObjectMethod|ObjectProperty'(path) {
-            if (path.node.key.name !== 'setup') return
-            path.traverse({
-              JSXAttribute(path) {
-                const n = path.get('name')
+          'ObjectMethod|ObjectProperty'(path1) {
+            if (path1.node.key.name !== 'setup') {
+              return
+            }
+            path1.traverse({
+              JSXAttribute(path2) {
+                const n = path2.get('name')
                 const isInputOrModel = ['v-on', 'on-input', 'on-change', 'model'].includes(n.node.name)
                 if (!isInputOrModel) return
-                path.traverse({
-                  MemberExpression(path) {
-                    const obj = path.get('object')
-                    const prop = path.get('property')
+                path2.traverse({
+                  MemberExpression(path3) {
+                    const obj = path3.get('object')
+                    const prop = path3.get('property')
                     if (t.isThisExpression(obj) && t.isIdentifier(prop) && ['$', '_'].includes(prop.node.name[0])) {
                       autoImportGetCurrentInstance(t, p)
                       obj.replaceWith(t.callExpression(t.identifier('getCurrentInstance'), []))

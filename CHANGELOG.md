@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/vuejs/jsx/compare/v1.1.2...v1.2.0) (2020-10-16)
+
+## other
+
+#### Features
+
+* add [@vue](https://github.com/vue)/composition-api support ([#142](https://github.com/vuejs/jsx/issues/142)) ([ecc6ed6](https://github.com/vuejs/jsx/commit/ecc6ed6))
+* allow prior babel plugins to traverse JSX tree throughly, close [#86](https://github.com/vuejs/jsx/issues/86) ([b49fa8a](https://github.com/vuejs/jsx/commit/b49fa8a))
+* change all sugar plugins to work without pre-traversing the Program ([0943580](https://github.com/vuejs/jsx/commit/0943580))
+
+
+
 # [1.1.2](https://github.com/vuejs/jsx/compare/v1.1.1...v1.1.2) (2019-11-09)
 
 ## other

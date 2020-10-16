@@ -1,10 +1,23 @@
+# [1.2.1](https://github.com/vuejs/jsx/compare/v1.2.0...v1.2.1) (2020-10-16)
+
+## other
+
+#### Bug Fixes
+
+* add composition-api packages to dependencies ([cd9db9f](https://github.com/vuejs/jsx/commit/cd9db9f))
+
+
+
 # [1.2.0](https://github.com/vuejs/jsx/compare/v1.1.2...v1.2.0) (2020-10-16)
 
 ## other
 
 #### Features
 
-* add [@vue/composition-api](https://github.com/vuejs/composition-api) support ([#142](https://github.com/vuejs/jsx/issues/142)) ([ecc6ed6](https://github.com/vuejs/jsx/commit/ecc6ed6))
+* add [@vue](https://github.com/vue)/composition-api support ([#142](https://github.com/vuejs/jsx/issues/142)) ([ecc6ed6](https://github.com/vuejs/jsx/commit/ecc6ed6))
+* allow prior babel plugins to traverse JSX tree throughly, close [#86](https://github.com/vuejs/jsx/issues/86) ([b49fa8a](https://github.com/vuejs/jsx/commit/b49fa8a))
+* change all sugar plugins to work without pre-traversing the Program ([0943580](https://github.com/vuejs/jsx/commit/0943580))
+
 
 
 # [1.1.2](https://github.com/vuejs/jsx/compare/v1.1.1...v1.1.2) (2019-11-09)
@@ -14,8 +27,6 @@
 #### Bug Fixes
 
 * add [@babel](https://github.com/babel)/core to peerDependencies ([f60f316](https://github.com/vuejs/jsx/commit/f60f316))
-* change all sugar plugins to work without pre-traversing the Program ([0943580](https://github.com/vuejs/jsx/commit/0943580))
-* allow prior babel plugins to traverse JSX tree throughly, close [#86](https://github.com/vuejs/jsx/issues/86) ([b49fa8a](https://github.com/vuejs/jsx/commit/b49fa8a))
 
 
 

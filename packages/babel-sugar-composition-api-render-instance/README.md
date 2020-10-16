@@ -34,12 +34,12 @@ However it is recommended to use the [configurable preset](../babel-preset-jsx/R
 This plugin automatically replaces `this` in `setup()` with `getCurrentInstance()`. This is required for JSX to work in @vue/composition-api as `this` is not available in `setup()`
 
 Input:
-```
+
+```jsx
 defineComponent({ 
   setup: () => <MyComponent vModel={a.b} />
 })
 ```
-
 
 Output (without @vue/babel-sugar-composition-api-render-instance):
 

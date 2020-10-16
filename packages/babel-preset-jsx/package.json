@@ -18,6 +18,8 @@
   "dependencies": {
     "@vue/babel-helper-vue-jsx-merge-props": "^1.2.0",
     "@vue/babel-plugin-transform-vue-jsx": "^1.2.0",
+    "@vue/babel-sugar-composition-api-inject-h": "^1.2.0",
+    "@vue/babel-sugar-composition-api-render-instance": "^1.2.0",
     "@vue/babel-sugar-functional-vue": "^1.2.0",
     "@vue/babel-sugar-inject-h": "^1.2.0",
     "@vue/babel-sugar-v-model": "^1.2.0",

@@ -31,22 +31,40 @@ However it is recommended to use the [configurable preset](../babel-preset-jsx/R
 
 ### Details
 
-This plugin automatically injects `h` in every method that has JSX. By using this plugin you don't have to always specifically declare `h` as first parameter in your `render()` function.
+This plugin automatically replaces `this` in `setup()` with `getCurrentInstance()`. This is required for JSX to work in @vue/composition-api as `this` is not available in `setup()`
 
-```js
-// Without @vue/babel-sugar-inject-h
-import { h } from '@vue/composition-api'
+Input:
+```
+defineComponent({ 
+  setup: () => <MyComponent vModel={a.b} />
+})
+```
 
-export default {
-  setup() {
-    return () => <button />
-  },
-}
 
-// With @vue/babel-sugar-inject-h
-export default {
-  setup() {
-    return () => <button />
-  },
-}
+Output (without @vue/babel-sugar-composition-api-render-instance):
+
+```jsx
+defineComponent({
+  setup: () => <MyComponent model={{
+    value: a.b,
+    callback: $$v => {
+      this.$set(a, "b", $$v);
+    }
+  }} />;
+})
+```
+
+Output (with @vue/babel-sugar-composition-api-render-instance):
+
+```jsx
+import { getCurrentInstance } from "@vue/composition-api";
+
+defineComponent({
+  setup: () => <MyComponent model={{
+    value: a.b,
+    callback: $$v => {
+      getCurrentInstance().$set(a, "b", $$v);
+    }
+  }} />;
+})
 ```

@@ -43,7 +43,7 @@ module.exports = {
 
 Options are:
 
-- `compositionAPI` - Enables [@vue/babel-sugar-composition-api-inject-h](../babel-sugar-composition-api-inject-h) and [@vue/babel-sugar-composition-api-render-instance](../babel-sugar-composition-api-inject-h), support returning render function in `setup`.
+- `compositionAPI` - Enables [@vue/babel-sugar-composition-api-inject-h](../babel-sugar-composition-api-inject-h) and [@vue/babel-sugar-composition-api-render-instance](../babel-sugar-composition-api-render-instance), support returning render function in `setup`.
 - `functional` [@vue/babel-sugar-functional-vue](../babel-sugar-functional-vue/README.md) - Functional components syntactic sugar
 - `injectH` [@vue/babel-sugar-inject-h](../babel-sugar-inject-h/README.md) - Automatic `h` injection syntactic sugar
 - `vModel` [@vue/babel-sugar-v-model](../babel-sugar-v-model/README.md) - `vModel` syntactic sugar

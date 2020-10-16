@@ -17,11 +17,11 @@ Install the preset with:
 npm install @vue/babel-preset-jsx @vue/babel-helper-vue-jsx-merge-props
 ```
 
-Then add the preset to `.babelrc`:
+Then add the preset to `babel.config.js`:
 
-```json
-{
-  "presets": ["@vue/babel-preset-jsx"]
+```js
+module.exports = {
+  presets: ['@vue/babel-preset-jsx'],
 }
 ```
 

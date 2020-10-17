@@ -54,29 +54,31 @@ export default babel => {
   return {
     inherits: syntaxJsx,
     visitor: {
-      'ObjectMethod|ClassMethod': {
-        exit(path) {
-          if (firstParamIsH(t, path) || !hasJSX(t, path) || isInsideJSXExpression(t, path)) {
-            return
+      Program(path1) {
+        path1.traverse({
+          'ObjectMethod|ClassMethod'(path) {
+            if (firstParamIsH(t, path) || !hasJSX(t, path) || isInsideJSXExpression(t, path)) {
+              return
+            }
+
+            const isRender = path.node.key.name === 'render'
+
+            path
+              .get('body')
+              .unshiftContainer(
+                'body',
+                t.variableDeclaration('const', [
+                  t.variableDeclarator(
+                    t.identifier('h'),
+                    isRender
+                      ? t.memberExpression(t.identifier('arguments'), t.numericLiteral(0), true)
+                      : t.memberExpression(t.thisExpression(), t.identifier('$createElement')),
+                  ),
+                ]),
+              )
           }
-
-          const isRender = path.node.key.name === 'render'
-
-          path
-            .get('body')
-            .unshiftContainer(
-              'body',
-              t.variableDeclaration('const', [
-                t.variableDeclarator(
-                  t.identifier('h'),
-                  isRender
-                    ? t.memberExpression(t.identifier('arguments'), t.numericLiteral(0), true)
-                    : t.memberExpression(t.thisExpression(), t.identifier('$createElement')),
-                ),
-              ]),
-            )
-        },
-      },
+        })
+      }
     },
   }
 }

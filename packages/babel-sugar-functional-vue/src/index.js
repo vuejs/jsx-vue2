@@ -77,35 +77,39 @@ export default babel => {
   return {
     inherits: syntaxJsx,
     visitor: {
-      ExportDefaultDeclaration: {
-        exit(path) {
-          if (!t.isArrowFunctionExpression(path.node.declaration) || !hasJSX(t, path)) {
-            return
-          }
+      Program(p) {
+        p.traverse({
+          ExportDefaultDeclaration: {
+            exit(path) {
+              if (!t.isArrowFunctionExpression(path.node.declaration) || !hasJSX(t, path)) {
+                return
+              }
 
-          convertFunctionalComponent(t, path.get('declaration'))
-        },
-      },
-      VariableDeclaration: {
-        exit(path) {
-          if (
-            path.node.declarations.length !== 1 ||
-            !t.isVariableDeclarator(path.node.declarations[0]) ||
-            !t.isArrowFunctionExpression(path.node.declarations[0].init)
-          ) {
-            return
-          }
+              convertFunctionalComponent(t, path.get('declaration'))
+            },
+          },
+          VariableDeclaration: {
+            exit(path) {
+              if (
+                path.node.declarations.length !== 1 ||
+                !t.isVariableDeclarator(path.node.declarations[0]) ||
+                !t.isArrowFunctionExpression(path.node.declarations[0].init)
+              ) {
+                return
+              }
 
-          const declarator = path.get('declarations')[0]
+              const declarator = path.get('declarations')[0]
 
-          if (!isFunctionalComponentDeclarator(t, declarator)) {
-            return
-          }
+              if (!isFunctionalComponentDeclarator(t, declarator)) {
+                return
+              }
 
-          const name = path.node.declarations[0].id.name
-          convertFunctionalComponent(t, path.get('declarations')[0].get('init'), name)
-        },
-      },
+              const name = path.node.declarations[0].id.name
+              convertFunctionalComponent(t, path.get('declarations')[0].get('init'), name)
+            },
+          },
+        })
+      }
     },
   }
 }

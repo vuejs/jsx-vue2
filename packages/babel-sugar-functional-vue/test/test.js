@@ -1,6 +1,7 @@
 import test from 'ava'
 import { transform } from '@babel/core'
 import plugin from '../dist/plugin.testing'
+import jsxPlugin from '../../babel-plugin-transform-vue-jsx/dist/plugin.testing'
 
 const transpile = src =>
   new Promise((resolve, reject) => {
@@ -8,6 +9,22 @@ const transpile = src =>
       src,
       {
         plugins: [plugin],
+      },
+      (err, result) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(result.code)
+      },
+    )
+  })
+
+const transpileWithJSXPlugin = src =>
+  new Promise((resolve, reject) => {
+    transform(
+      src,
+      {
+        plugins: [plugin, jsxPlugin],
       },
       (err, result) => {
         if (err) {
@@ -106,4 +123,20 @@ tests.map(({ name, from, to, NODE_ENV }) => {
       process.env.NODE_ENV = nodeEnvCopy
     }
   })
+})
+
+test('Should work with JSX plugin enabled', async t => {
+  const from = `export const A = ({ props, listeners }) => <div onClick={listeners.click}>{props.msg}</div>`
+  const to = `export const A = {
+  functional: true,
+  render: (h, {
+    props,
+    listeners
+  }) => h("div", {
+    "on": {
+      "click": listeners.click
+    }
+  }, [props.msg])
+};`
+  t.is(await(transpileWithJSXPlugin(from)), to)
 })

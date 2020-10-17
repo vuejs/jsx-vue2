@@ -15,7 +15,7 @@
     "prepublish": "yarn build",
     "build": "rollup -c",
     "build:test": "rollup -c rollup.config.testing.js",
-    "pretest": "yarn build:test",
+    "pretest": "yarn build:test && cd ../babel-plugin-transform-vue-jsx && yarn build:test",
     "test": "nyc --reporter=html --reporter=text-summary ava -v test/test.js"
   },
   "devDependencies": {

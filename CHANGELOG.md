@@ -1,3 +1,13 @@
+# [1.2.2](https://github.com/vuejs/jsx/compare/v1.2.1...v1.2.2) (2020-10-17)
+
+## other
+
+#### Bug Fixes
+
+* functional-vue & inject-h should traverse before JSX plugin ([#166](https://github.com/vuejs/jsx/issues/166)) ([8969609](https://github.com/vuejs/jsx/commit/8969609)), closes [#165](https://github.com/vuejs/jsx/issues/165)
+
+
+
 # [1.2.1](https://github.com/vuejs/jsx/compare/v1.2.0...v1.2.1) (2020-10-16)
 
 ## other

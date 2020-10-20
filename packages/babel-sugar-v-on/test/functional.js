@@ -651,3 +651,31 @@ test('should support keyboard modifier for direction keys', t => {
   t.is(stubUp.calls.length, 1)
   t.is(stubDown.calls.length, 1)
 })
+
+test('should work with nested components inside arrow functions', t => {
+  const stubMouseLeft = t.context.stub()
+  const stubKeyLeft = t.context.stub()
+  const wrapper = mount({
+    methods: {
+      foo: stubMouseLeft,
+      bar: stubKeyLeft
+    },
+    render(h) {
+      return (
+        <div>
+          <div id="mouse" vOn:mousedown_left={this.foo}>
+            {[1].map(() =>
+              <input id="key" vOn:keydown_left={this.bar} />
+            )}
+          </div>
+        </div>
+      )
+    }
+  })
+
+  wrapper.find('#mouse').trigger('mousedown.left')
+  wrapper.find('#key').trigger('keydown.left')
+
+  t.is(stubMouseLeft.calls.length, 1)
+  t.is(stubKeyLeft.calls.length, 1)
+})

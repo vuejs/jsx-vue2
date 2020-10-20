@@ -24,21 +24,23 @@ export default function(babel) {
   return {
     inherits: syntaxJsx,
     visitor: {
-      JSXAttribute: {
-        exit(path) {
-          const parsed = parseVModel(t, path)
-          if (!parsed) {
-            return
+      Program(p) {
+        p.traverse({
+          JSXAttribute(path) {
+            const parsed = parseVModel(t, path)
+            if (!parsed) {
+              return
+            }
+  
+            const { modifiers, valuePath } = parsed
+  
+            const parent = path.parentPath
+            transformModel(t, parent, valuePath, modifiers)
+            path.remove()
           }
-
-          const { modifiers, valuePath } = parsed
-
-          const parent = path.parentPath
-          transformModel(t, parent, valuePath, modifiers)
-          path.remove()
-        },
-      },
-    },
+        })
+      }
+    }
   }
 }
 

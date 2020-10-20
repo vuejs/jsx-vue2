@@ -287,17 +287,19 @@ export default function(babel) {
   return {
     inherits: syntaxJsx,
     visitor: {
-      JSXAttribute: {
-        exit(path) {
-          const { event, expression, isNative } = genHandler(path)
+      Program(p) {
+        p.traverse({
+          JSXAttribute(path) {
+            const { event, expression, isNative } = genHandler(path)
 
-          if (event) {
-            path.remove()
+            if (event) {
+              path.remove()
 
-            addEvent(event, expression, isNative, path.parentPath.node.attributes)
+              addEvent(event, expression, isNative, path.parentPath.node.attributes)
+            }
           }
-        },
-      },
-    },
+        })
+      }
+    }
   }
 }

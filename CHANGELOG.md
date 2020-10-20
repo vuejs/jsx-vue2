@@ -1,3 +1,13 @@
+# [1.2.3](https://github.com/vuejs/jsx/compare/v1.2.2...v1.2.3) (2020-10-20)
+
+## other
+
+#### Bug Fixes
+
+* v-model/v-on should apply before arrow-functions transform ([#167](https://github.com/vuejs/jsx/issues/167)) ([319932e](https://github.com/vuejs/jsx/commit/319932e)), closes [#87](https://github.com/vuejs/jsx/issues/87) [/github.com/vuejs/jsx/issues/165#issuecomment-712603569](https://github.com//github.com/vuejs/jsx/issues/165/issues/issuecomment-712603569)
+
+
+
 # [1.2.2](https://github.com/vuejs/jsx/compare/v1.2.1...v1.2.2) (2020-10-17)
 
 ## other

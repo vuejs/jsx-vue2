@@ -34,51 +34,59 @@ const tests = [
   {
     name: 'Ignores non vModel arguments',
     from: `const a = { setup: () => { return () => <A x="y" a:b={c} /> } }`,
-    to: `const a = {
+    to: `
+const a = {
   setup: () => {
     return () => <A x="y" a:b={c} />;
   }
-};`,
+};`.trim(),
   },
   {
     name: 'Generic component vModel',
     from: `const a = { setup: () => { return () => <MyComponent vModel={a.b} /> } }`,
-    to: `import { getCurrentInstance } from "@vue/composition-api";
+    to: `
+import { getCurrentInstance } from "@vue/composition-api";
 const a = {
   setup: () => {
+    const __currentInstance = getCurrentInstance();
+
     return () => <MyComponent model={{
       value: a.b,
       callback: $$v => {
-        getCurrentInstance().$set(a, "b", $$v);
+        __currentInstance.$set(a, "b", $$v);
       }
     }} />;
   }
-};`,
+};`.trim(),
   },
   {
     name: 'Component vModel_number',
     from: `const a = { setup: () => { return () => <MyComponent vModel_number={a.b} /> } }`,
-    to: `import { getCurrentInstance } from "@vue/composition-api";
+    to: `
+import { getCurrentInstance } from "@vue/composition-api";
 const a = {
   setup: () => {
+    const __currentInstance = getCurrentInstance();
+
     return () => <MyComponent model={{
       value: a.b,
       callback: $$v => {
-        getCurrentInstance().$set(a, "b", getCurrentInstance()._n($$v));
+        __currentInstance.$set(a, "b", __currentInstance._n($$v));
       }
     }} />;
   }
-};`,
+};`.trim(),
   },
   {
     name: 'Ignore outside of setup()',
     from: `const A = <MyComponent vModel={a[b]} />`,
-    to: `const A = <MyComponent model={{
+    to: `
+const A = <MyComponent model={{
   value: a[b],
   callback: $$v => {
     this.$set(a, b, $$v);
   }
-}} />;`,
+}} />;`.trim(),
   },
 ]
 

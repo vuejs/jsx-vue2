@@ -37,7 +37,9 @@ Input:
 
 ```jsx
 defineComponent({ 
-  setup: () => <MyComponent vModel={a.b} />
+  setup() {
+    return () => <MyComponent vModel={a.b} />
+  }
 })
 ```
 
@@ -45,12 +47,14 @@ Output (without @vue/babel-sugar-composition-api-render-instance):
 
 ```jsx
 defineComponent({
-  setup: () => <MyComponent model={{
-    value: a.b,
-    callback: $$v => {
-      this.$set(a, "b", $$v);
-    }
-  }} />;
+  setup() {
+    return () => <MyComponent model={{
+      value: a.b,
+      callback: $$v => {
+        this.$set(a, "b", $$v);
+      }
+    }} />
+  }
 })
 ```
 
@@ -60,11 +64,15 @@ Output (with @vue/babel-sugar-composition-api-render-instance):
 import { getCurrentInstance } from "@vue/composition-api";
 
 defineComponent({
-  setup: () => <MyComponent model={{
-    value: a.b,
-    callback: $$v => {
-      getCurrentInstance().$set(a, "b", $$v);
-    }
-  }} />;
+  setup() {
+    const __currentInstance = getCurrentInstance();
+
+    return () => <MyComponent model={{
+      value: a.b,
+      callback: $$v => {
+        __currentInstance.$set(a, "b", $$v);
+      }
+    }} />
+  }
 })
 ```

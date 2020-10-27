@@ -20,6 +20,8 @@ const autoImportGetCurrentInstance = (t, path) => {
   }
 }
 
+const injectInstanceId = '__currentInstance'
+
 export default ({ types: t }) => {
   return {
     inherits: syntaxJsx,
@@ -30,6 +32,11 @@ export default ({ types: t }) => {
             if (path1.node.key.name !== 'setup') {
               return
             }
+
+            let instanceInjected = false
+
+           
+
             path1.traverse({
               JSXAttribute(path2) {
                 const n = path2.get('name')
@@ -41,7 +48,18 @@ export default ({ types: t }) => {
                     const prop = path3.get('property')
                     if (t.isThisExpression(obj) && t.isIdentifier(prop) && ['$', '_'].includes(prop.node.name[0])) {
                       autoImportGetCurrentInstance(t, p)
-                      obj.replaceWith(t.callExpression(t.identifier('getCurrentInstance'), []))
+                      if (!instanceInjected) {
+                        path1.node.value.body.body.unshift(
+                          t.variableDeclaration('const', [
+                            t.variableDeclarator(
+                              t.identifier(injectInstanceId),
+                              t.callExpression(t.identifier('getCurrentInstance'), []),
+                            ),
+                          ]),
+                        )
+                        instanceInjected = true
+                      }
+                      obj.replaceWith(t.identifier(injectInstanceId))
                     }
                   },
                 })

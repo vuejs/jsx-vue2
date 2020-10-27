@@ -1,3 +1,13 @@
+# [1.2.4](https://github.com/vuejs/jsx/compare/v1.2.3...v1.2.4) (2020-10-27)
+
+## other
+
+#### Bug Fixes
+
+* **composition-api-render-instance:** store currentInstance in variable for render instance ([#168](https://github.com/vuejs/jsx/issues/168)) ([a3525bf](https://github.com/vuejs/jsx/commit/a3525bf))
+
+
+
 # [1.2.3](https://github.com/vuejs/jsx/compare/v1.2.2...v1.2.3) (2020-10-20)
 
 ## other

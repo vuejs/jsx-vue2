@@ -166,7 +166,7 @@ const parseAttributeJSXAttribute = (t, path, attributes, tagName, elementType) =
 
   prefix = prefixes.find(el => name.startsWith(el)) || 'attrs'
   name = name.replace(new RegExp(`^${prefix}\-?`), '')
-  name = name[0].toLowerCase() + name.substr(1)
+  name = name[0].toLowerCase() + name.slice(1)
 
   const valuePath = path.get('value')
   let value
@@ -193,7 +193,7 @@ const parseAttributeJSXAttribute = (t, path, attributes, tagName, elementType) =
     attributes[name] = value
   } else {
     if (isDirective(name)) {
-      name = kebabcase(name.substr(1))
+      name = kebabcase(name.slice(1))
       prefix = 'directives'
     } else {
       name = [name, ...modifiers].join('_')

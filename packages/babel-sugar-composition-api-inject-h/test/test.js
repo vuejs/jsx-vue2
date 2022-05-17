@@ -22,11 +22,18 @@ const tests = [
   {
     name: "Don't inject without JSX",
     from: `const obj = {
+      setup () {
+        return {}
+      },
       method () {
         return () => {}
       }
     }`,
     to: `const obj = {
+  setup() {
+    return {};
+  },
+
   method() {
     return () => {};
   }
@@ -35,15 +42,16 @@ const tests = [
   },
   {
     name: "Don't re-inject",
-    from: `import { h } from "@vue/composition-api";
+    from: `import { getCurrentInstance } from "@vue/composition-api";
 const obj = {
-      method () {
+      setup () {
         return <div>test</div>
       }
     }`,
-    to: `import { h } from "@vue/composition-api";
+    to: `import { getCurrentInstance } from "@vue/composition-api";
 const obj = {
-  method() {
+  setup() {
+    const h = getCurrentInstance().proxy.$createElement;
     return <div>test</div>;
   }
 
@@ -56,9 +64,9 @@ const obj = {
         return <div>test</div>
       }
     }`,
-    to: `import { h } from "@vue/composition-api";
-const obj = {
+    to: `const obj = {
   method() {
+    const h = this.$createElement;
     return <div>test</div>;
   }
 
@@ -75,9 +83,9 @@ const obj = {
         }}>test</div>
       }
     }`,
-    to: `import { h } from "@vue/composition-api";
-const obj = {
+    to: `const obj = {
   method() {
+    const h = this.$createElement;
     return <div foo={{
       render() {
         return <div>bar</div>;
@@ -95,9 +103,9 @@ const obj = {
         return <div>test</div>
       }
     }`,
-    to: `import { h } from "@vue/composition-api";
-const obj = {
+    to: `const obj = {
   get method() {
+    const h = this.$createElement;
     return <div>test</div>;
   }
 
@@ -110,9 +118,9 @@ const obj = {
         return <div>test</div>
       }
     }`,
-    to: `import { h } from "@vue/composition-api";
-const obj = {
+    to: `const obj = {
   method(hey) {
+    const h = this.$createElement;
     return <div>test</div>;
   }
 
@@ -125,9 +133,9 @@ const obj = {
         return <div>test</div>
       }
     }`,
-    to: `import { h } from "@vue/composition-api";
-const obj = {
+    to: `const obj = {
   render() {
+    const h = arguments[0];
     return <div>test</div>;
   }
 
@@ -145,9 +153,10 @@ const obj = {
       }
     }
     }`,
-    to: `import { h } from "@vue/composition-api";
+    to: `import { getCurrentInstance } from "@vue/composition-api";
 const obj = {
   setup() {
+    const h = getCurrentInstance().proxy.$createElement;
     return () => {
       return <div>test</div>;
     };
@@ -166,8 +175,7 @@ const obj = {
       }
     }
     }`,
-    to: `import { h } from "@vue/composition-api";
-const obj = {
+    to: `const obj = {
   setup2() {
     var h = this.$createElement;
     return () => {
@@ -177,6 +185,31 @@ const obj = {
 
 };`,
   },
+  {
+    name: '$createElement out setup and getCurrentInstance().proxy.$createElement in setup',
+    from: `
+  const obj = {
+    setup() {
+      return <div>test</div>
+    },
+    method() {
+      return <div>test</div>
+    }
+  }`,
+    to: `import { getCurrentInstance } from "@vue/composition-api";
+const obj = {
+  setup() {
+    const h = getCurrentInstance().proxy.$createElement;
+    return <div>test</div>;
+  },
+
+  method() {
+    const h = this.$createElement;
+    return <div>test</div>;
+  }
+
+};`
+  }
 ]
 
 tests.forEach(({ name, from, to }) => test(name, async t => t.is(await transpile(from), to)))

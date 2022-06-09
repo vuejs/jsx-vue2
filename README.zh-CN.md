@@ -1,4 +1,5 @@
 # Babel Preset JSX
+[English](./README.md) | 简体中文
 
 添加babel预设， 让Vue支持JSX语法. 查看插件[配置项](./packages/babel-preset-jsx).
 
@@ -23,6 +24,25 @@ npm install @vue/babel-preset-jsx @vue/babel-helper-vue-jsx-merge-props
 module.exports = {
   presets: ['@vue/babel-preset-jsx'],
 }
+```
+
+**tips**: 如果出现 `Duplicate declaration "h" (This is an error on an internal node. Probably an internal error.)`
+
+请调整配置如下
+``````JS
+module.exports = {
+  presets: [
+    [
+      '@vue/babel-preset-jsx',
+      // 不自动注入h
+      {
+        "injectH": false
+      }
+    ]
+  ],
+}
+```
+
 ```
 
 ## 语法

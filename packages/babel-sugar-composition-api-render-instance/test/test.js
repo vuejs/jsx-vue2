@@ -17,7 +17,7 @@ const transpile = src =>
         transform(
           result.code,
           {
-            plugins: [plugin],
+            plugins: [[plugin, { importSource: 'source' }]],
           },
           (err, result) => {
             if (err) {
@@ -45,7 +45,7 @@ const a = {
     name: 'Generic component vModel',
     from: `const a = { setup: () => { return () => <MyComponent vModel={a.b} /> } }`,
     to: `
-import { getCurrentInstance } from "@vue/composition-api";
+import { getCurrentInstance } from "source";
 const a = {
   setup: () => {
     const __currentInstance = getCurrentInstance();
@@ -63,7 +63,7 @@ const a = {
     name: 'Component vModel_number',
     from: `const a = { setup: () => { return () => <MyComponent vModel_number={a.b} /> } }`,
     to: `
-import { getCurrentInstance } from "@vue/composition-api";
+import { getCurrentInstance } from "source";
 const a = {
   setup: () => {
     const __currentInstance = getCurrentInstance();

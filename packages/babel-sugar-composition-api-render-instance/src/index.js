@@ -1,7 +1,6 @@
 import syntaxJsx from '@babel/plugin-syntax-jsx'
 
-const autoImportGetCurrentInstance = (t, path) => {
-  const importSource = '@vue/composition-api'
+const autoImportGetCurrentInstance = (t, path, importSource) => {
   const importNodes = path
     .get('body')
     .filter(p => p.isImportDeclaration())
@@ -22,7 +21,7 @@ const autoImportGetCurrentInstance = (t, path) => {
 
 const injectInstanceId = '__currentInstance'
 
-export default ({ types: t }) => {
+export default ({ types: t }, { importSource = '@vue/composition-api' } = {}) => {
   return {
     inherits: syntaxJsx,
     visitor: {
@@ -35,8 +34,6 @@ export default ({ types: t }) => {
 
             let instanceInjected = false
 
-           
-
             path1.traverse({
               JSXAttribute(path2) {
                 const n = path2.get('name')
@@ -47,7 +44,7 @@ export default ({ types: t }) => {
                     const obj = path3.get('object')
                     const prop = path3.get('property')
                     if (t.isThisExpression(obj) && t.isIdentifier(prop) && ['$', '_'].includes(prop.node.name[0])) {
-                      autoImportGetCurrentInstance(t, p)
+                      autoImportGetCurrentInstance(t, p, importSource)
                       if (!instanceInjected) {
                         path1.node.value.body.body.unshift(
                           t.variableDeclaration('const', [

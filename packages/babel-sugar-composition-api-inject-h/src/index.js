@@ -1,7 +1,5 @@
 import syntaxJsx from '@babel/plugin-syntax-jsx'
 
-const importSource = '@vue/composition-api'
-
 /**
  * Check if body contains JSX
  * @param t
@@ -49,7 +47,7 @@ const remove$createElement = (t, path) => {
 }
 
 // auto import `h` from `@vue/composition-api`
-const autoImportH = (t, path) => {
+const autoImportH = (t, path, importSource) => {
   if (hasJSX(t, path)) {
     const importNodes = path
       .get('body')
@@ -68,7 +66,7 @@ const autoImportH = (t, path) => {
   }
 }
 
-export default babel => {
+export default (babel, { importSource = '@vue/composition-api' } = {}) => {
   const t = babel.types
 
   return {
@@ -76,7 +74,7 @@ export default babel => {
     visitor: {
       Program(path) {
         remove$createElement(t, path)
-        autoImportH(t, path)
+        autoImportH(t, path, importSource)
       },
     },
   }

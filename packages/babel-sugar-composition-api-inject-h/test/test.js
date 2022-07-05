@@ -7,7 +7,7 @@ const transpile = src =>
     transform(
       src,
       {
-        plugins: [plugin],
+        plugins: [[plugin, { importSource: 'source' }]],
       },
       (err, result) => {
         if (err) {
@@ -35,13 +35,13 @@ const tests = [
   },
   {
     name: "Don't re-inject",
-    from: `import { h } from "@vue/composition-api";
+    from: `import { h } from "source";
 const obj = {
       method () {
         return <div>test</div>
       }
     }`,
-    to: `import { h } from "@vue/composition-api";
+    to: `import { h } from "source";
 const obj = {
   method() {
     return <div>test</div>;
@@ -56,7 +56,7 @@ const obj = {
         return <div>test</div>
       }
     }`,
-    to: `import { h } from "@vue/composition-api";
+    to: `import { h } from "source";
 const obj = {
   method() {
     return <div>test</div>;
@@ -75,7 +75,7 @@ const obj = {
         }}>test</div>
       }
     }`,
-    to: `import { h } from "@vue/composition-api";
+    to: `import { h } from "source";
 const obj = {
   method() {
     return <div foo={{
@@ -95,7 +95,7 @@ const obj = {
         return <div>test</div>
       }
     }`,
-    to: `import { h } from "@vue/composition-api";
+    to: `import { h } from "source";
 const obj = {
   get method() {
     return <div>test</div>;
@@ -110,7 +110,7 @@ const obj = {
         return <div>test</div>
       }
     }`,
-    to: `import { h } from "@vue/composition-api";
+    to: `import { h } from "source";
 const obj = {
   method(hey) {
     return <div>test</div>;
@@ -125,7 +125,7 @@ const obj = {
         return <div>test</div>
       }
     }`,
-    to: `import { h } from "@vue/composition-api";
+    to: `import { h } from "source";
 const obj = {
   render() {
     return <div>test</div>;
@@ -145,7 +145,7 @@ const obj = {
       }
     }
     }`,
-    to: `import { h } from "@vue/composition-api";
+    to: `import { h } from "source";
 const obj = {
   setup() {
     return () => {
@@ -166,7 +166,7 @@ const obj = {
       }
     }
     }`,
-    to: `import { h } from "@vue/composition-api";
+    to: `import { h } from "source";
 const obj = {
   setup2() {
     var h = this.$createElement;

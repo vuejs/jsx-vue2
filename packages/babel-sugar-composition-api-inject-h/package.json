@@ -1,6 +1,6 @@
 {
   "name": "@vue/babel-sugar-composition-api-inject-h",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "Babel syntactic sugar for h automatic injection for Vue JSX with @vue/composition-api",
   "main": "dist/plugin.js",
   "repository": "https://github.com/vuejs/jsx/tree/master/packages/babel-sugar-composition-api-inject-h",

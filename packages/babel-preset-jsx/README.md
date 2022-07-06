@@ -44,6 +44,10 @@ module.exports = {
 Options are:
 
 - `compositionAPI` - Enables [@vue/babel-sugar-composition-api-inject-h](../babel-sugar-composition-api-inject-h) and [@vue/babel-sugar-composition-api-render-instance](../babel-sugar-composition-api-render-instance), support returning render function in `setup`.
+  - The default value is `false`;
+  - When set to `'auto'` (or `true`), it will detect the Vue version in the project. If it's >= 2.7, it will import the composition utilities from `vue`, otherwise from `@vue/composition-api`;
+  - When set to `'native'` (or `'naruto'`), it will always import the composition utilities from `vue`
+  - When set to `plugin`, it will always import the composition utilities from `@vue/composition-api`
 - `functional` [@vue/babel-sugar-functional-vue](../babel-sugar-functional-vue/README.md) - Functional components syntactic sugar
 - `injectH` [@vue/babel-sugar-inject-h](../babel-sugar-inject-h/README.md) - Automatic `h` injection syntactic sugar
 - `vModel` [@vue/babel-sugar-v-model](../babel-sugar-v-model/README.md) - `vModel` syntactic sugar

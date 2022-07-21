@@ -1,3 +1,13 @@
+# [1.3.1](https://github.com/vuejs/jsx-vue2/compare/v1.3.0...v1.3.1) (2022-07-21)
+
+## other
+
+#### Bug Fixes
+
+* relax the vue peer dependency version requirement ([8b5f023](https://github.com/vuejs/jsx-vue2/commit/8b5f023))
+
+
+
 # [1.3.0](https://github.com/vuejs/jsx-vue2/compare/v1.2.4...v1.3.0) (2022-07-06)
 
 ## other

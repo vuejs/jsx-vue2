@@ -335,7 +335,7 @@ test('div[vModel] throws an error', t =>
         resolve()
       })
       .catch(e => {
-        t.is(e.message, 'vModel: div[type=] is not supported')
+        t.true(e.message.includes('vModel: div[type=] is not supported'))
         resolve()
       })
   }))
@@ -348,7 +348,7 @@ test('static vModel throws an error', t =>
         resolve()
       })
       .catch(e => {
-        t.is(e.message, 'You have to use JSX Expression inside your v-model')
+        t.true(e.message.includes( 'You have to use JSX Expression inside your v-model'))
         resolve()
       })
   }))

@@ -14,7 +14,8 @@
   "scripts": {
     "pretest:snapshot": "yarn build:test",
     "test:snapshot": "nyc --reporter=html --reporter=text-summary ava -v test/snapshot.js",
-    "pretest:functional": "yarn build:test && nyc --reporter=html --reporter=text-summary babel test/functional.js --plugins ./dist/plugin.testing.js,./node_modules/@vue/babel-plugin-transform-vue-jsx/dist/plugin.js,@babel/plugin-transform-arrow-functions --out-file test/functional-compiled.js",
+    "build:plugin": "cd ../babel-plugin-transform-vue-jsx && yarn build",
+    "pretest:functional": "yarn build:plugin && yarn build:test && nyc --reporter=html --reporter=text-summary babel test/functional.js --plugins ./dist/plugin.testing.js,../babel-plugin-transform-vue-jsx/dist/plugin.js,@babel/plugin-transform-arrow-functions --out-file test/functional-compiled.js",
     "test:functional": "ava -v test/functional-compiled.js",
     "build": "rollup -c",
     "build:test": "rollup -c rollup.config.testing.js",
@@ -26,7 +27,7 @@
     "@babel/core": "^7.2.0",
     "@babel/plugin-transform-arrow-functions": "^7.12.1",
     "@babel/preset-env": "^7.2.0",
-    "@vue/test-utils": "^1.0.0-beta.26",
+    "@vue/test-utils": "1.0.0-beta.26",
     "ava": "^0.25.0",
     "jsdom": "^13.0.0",
     "jsdom-global": "^3.0.2",

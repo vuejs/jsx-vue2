@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: vuejs/ci
+      - image: circleci/node:lts
         user: node
 
     working_directory: /home/node/repo

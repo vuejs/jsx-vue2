@@ -13,24 +13,32 @@ export default (_, {
   vOn = true,
   compositionAPI = false
 } = {}) => {
-  // compositionAPI: 'auto' | 'native' | 'plugin' | false
+  // compositionAPI: 'auto' | 'native' | 'plugin' | 'vue-demi' | false | { importSource: string; }
   // legacy: compositionAPI: true (equivalent to 'auto')
   // bonus:  compositionAPI: 'naruto' (equivalent to 'native')
   let injectHPlugin = babelSugarInjectH
   let importSource = '@vue/composition-api'
 
   if (compositionAPI) {
-    if (compositionAPI === 'native' || compositionAPI === 'naruto') {
+    if (['native', 'naruto'].includes(compositionAPI)) {
       importSource = 'vue'
     }
 
-    if (compositionAPI === 'auto' || compositionAPI === true) {
+    if (compositionAPI === 'vue-demi') {
+      importSource = 'vue-demi'
+    }
+
+    if (['auto', true].includes(compositionAPI)) {
       try {
         const vueVersion = require('vue/package.json').version
         if (vueVersion.startsWith('2.7')) {
           importSource = 'vue'
         }
-      } catch (e) {}
+      } catch (e) { }
+    }
+
+    if (typeof compositionAPI === 'object' && compositionAPI.importSource) {
+      importSource = compositionAPI.importSource
     }
 
     injectHPlugin = [babelSugarCompositionApiInjectH, { importSource }]

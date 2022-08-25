@@ -47,7 +47,9 @@ Options are:
   - The default value is `false`;
   - When set to `'auto'` (or `true`), it will detect the Vue version in the project. If it's >= 2.7, it will import the composition utilities from `vue`, otherwise from `@vue/composition-api`;
   - When set to `'native'` (or `'naruto'`), it will always import the composition utilities from `vue`
-  - When set to `plugin`, it will always import the composition utilities from `@vue/composition-api`
+  - When set to `plugin`, it will always import the composition utilities from `@vue/composition-api`, but it will redirect to `'vue'` itself when the vue version is `2.7.x`
+  - When set to `vue-demi`, it will always import the composition utilities from `vue-demi`
+  - When set to an object like `{ importSource: string; }`, it will always import the composition utilities from the importSource you set
 - `functional` [@vue/babel-sugar-functional-vue](../babel-sugar-functional-vue/README.md) - Functional components syntactic sugar
 - `injectH` [@vue/babel-sugar-inject-h](../babel-sugar-inject-h/README.md) - Automatic `h` injection syntactic sugar
 - `vModel` [@vue/babel-sugar-v-model](../babel-sugar-v-model/README.md) - `vModel` syntactic sugar

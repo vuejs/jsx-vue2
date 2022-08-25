@@ -1,3 +1,13 @@
+# [1.4.0](https://github.com/vuejs/jsx-vue2/compare/v1.3.1...v1.4.0) (2022-08-25)
+
+## other
+
+#### Features
+
+* Make `importSource` API configurable ([#291](https://github.com/vuejs/jsx-vue2/issues/291)) ([60da266](https://github.com/vuejs/jsx-vue2/commit/60da266))
+
+
+
 # [1.3.1](https://github.com/vuejs/jsx-vue2/compare/v1.3.0...v1.3.1) (2022-07-21)
 
 ## other

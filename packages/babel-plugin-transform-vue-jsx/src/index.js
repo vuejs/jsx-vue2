@@ -152,11 +152,13 @@ const parseAttributeJSXAttribute = (t, path, attributes, tagName, elementType) =
   let name
   let modifiers
   let argument
+  let rawName
   if (t.isJSXNamespacedName(namePath)) {
     name = `${namePath.get('namespace.name').node}:${namePath.get('name.name').node}`
   } else {
     name = namePath.get('name').node
   }
+  rawName = name
   if (prefixes.includes(name) && t.isJSXExpressionContainer(path.get('value'))) {
     return t.JSXSpreadAttribute(t.objectExpression([t.objectProperty(t.stringLiteral(name), path.get('value').node.expression)]))
   }
@@ -188,6 +190,7 @@ const parseAttributeJSXAttribute = (t, path, attributes, tagName, elementType) =
 
   value._argument = argument
   value._modifiers = modifiers
+  value._rawName = rawName
 
   if (rootAttributes.includes(name)) {
     attributes[name] = value
@@ -294,6 +297,9 @@ const transformDirectives = (t, directives) =>
     directives.properties.map(directive =>
       t.objectExpression([
         t.objectProperty(t.identifier('name'), directive.key),
+        ...(directive.value._rawName
+            ? [t.objectProperty(t.identifier('rawName'), t.stringLiteral(directive.value._rawName))]
+            : []),
         t.objectProperty(t.identifier('value'), directive.value),
         ...(directive.value._argument
           ? [t.objectProperty(t.identifier('arg'), t.stringLiteral(directive.value._argument))]

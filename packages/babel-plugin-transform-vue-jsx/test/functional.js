@@ -250,8 +250,8 @@ test('Custom directives', t => {
   })
 
   t.is(wrapper.vnode.data.directives.length, 2)
-  t.deepEqual(wrapper.vnode.data.directives[0], { def: directive, modifiers: {}, name: 'test', value: 123 })
-  t.deepEqual(wrapper.vnode.data.directives[1], { def: directive, modifiers: {}, name: 'other', value: 234 })
+  t.deepEqual(wrapper.vnode.data.directives[0], { def: directive, modifiers: {}, name: 'test', rawName: 'v-test', value: 123 })
+  t.deepEqual(wrapper.vnode.data.directives[1], { def: directive, modifiers: {}, name: 'other', rawName: 'vOther', value: 234 })
 })
 
 test('xlink:href', t => {

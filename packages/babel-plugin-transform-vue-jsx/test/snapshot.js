@@ -232,21 +232,33 @@ render(h => h("div", _mergeJSXProps([{}, spread, {
   },
   {
     name: 'Directives',
-    from: `render(h => <div v-test={ 123 } vSomething_modifier={ 1234 } vOtherStuff:argument_modifier1_modifier2={ 234 } />)`,
+    from: `render(h => <div v-test={ 123 } vSomething_modifier={ 1234 } vOtherStuff:argument_modifier1_modifier2={ 234 } vOtherStuff:argument2_modifier1_modifier2={ 2345 } />)`,
     to: `render(h => h("div", {
   "directives": [{
     name: "test",
+    rawName: "v-test",
     value: 123
   }, {
     name: "something",
+    rawName: "vSomething_modifier",
     value: 1234,
     modifiers: {
       "modifier": true
     }
   }, {
     name: "other-stuff",
+    rawName: "vOtherStuff:argument_modifier1_modifier2",
     value: 234,
     arg: "argument",
+    modifiers: {
+      "modifier1": true,
+      "modifier2": true
+    }
+  }, {
+    name: "other-stuff",
+    rawName: "vOtherStuff:argument2_modifier1_modifier2",
+    value: 2345,
+    arg: "argument2",
     modifiers: {
       "modifier1": true,
       "modifier2": true

@@ -1,5 +1,7 @@
 # Babel Preset JSX
 
+English | [简体中文](./README.zh-CN.md)
+
 Configurable Babel preset to add Vue JSX support. See the [configuration options here](./packages/babel-preset-jsx).
 
 ## Compatibility

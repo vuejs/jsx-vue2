@@ -4,7 +4,6 @@
   "description": "Online playground for Vue 2 JSX preset",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite",
     "build": "vite build"
   },

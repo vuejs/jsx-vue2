@@ -120,6 +120,55 @@ const tests = [
 
 };`,
   },
+  {
+    name: 'Has Defined H Variable in object method',
+    from: `const obj = {
+      getTextNode() {
+        const h = this.$createElement
+        return <div>test</div>
+      }
+    }`,
+    to: `const obj = {
+  getTextNode() {
+    const h = this.$createElement;
+    return <div>test</div>;
+  }
+
+};`
+  },
+  {
+    name: 'Has Defined H Variable in render method',
+    from: `const obj = {
+      render() {
+        const h = arguments[0];
+        return <div>test</div>
+      }
+    }`,
+    to: `const obj = {
+  render() {
+    const h = arguments[0];
+    return <div>test</div>;
+  }
+
+};`,
+  },
+  {
+    name: 'Has Defined not H Variable in render method',
+    from: `const obj = {
+      render() {
+        const a = arguments[0];
+        return <div>test</div>
+      }
+    }`,
+    to: `const obj = {
+  render() {
+    const h = arguments[0];
+    const a = arguments[0];
+    return <div>test</div>;
+  }
+
+};`
+  }
 ]
 
 tests.forEach(({ name, from, to }) => test(name, async t => t.is(await transpile(from), to)))

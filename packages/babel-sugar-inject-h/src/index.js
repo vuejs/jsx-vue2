@@ -48,6 +48,40 @@ const isInsideJSXExpression = (t, path) => {
   return isInsideJSXExpression(t, path.parentPath)
 }
 
+/**
+ * check if has Defined H Variable And assigned $createElement in method or arguments[0] in render
+ * @param t
+ * @param path ObjectMethod | ClassMethod
+ * @returns boolean
+ */
+const hasDefinedHVariable = (t, path) => {
+  let result = {
+    hasDefined: false
+  }
+
+  const inRender = path.node.key.name === 'render'
+
+  path.traverse(
+    {
+      VariableDeclarator(path, state) {
+        if (state.hasDefined || path.node.id.name !== 'h') {
+          return
+        }
+
+        const { init } = path.node
+        state.hasDefined = t.isMemberExpression(init) &&
+          (inRender ?
+            t.isIdentifier(init.object) && init.object.name === 'arguments' && t.isNumericLiteral(init.property) && init.property.value === 0 :
+            t.isThisExpression(init.object) && t.isIdentifier(init.property) && init.property.name === '$createElement'
+          )
+      }
+    },
+    result
+  )
+
+  return result.hasDefined
+}
+
 export default babel => {
   const t = babel.types
 
@@ -57,7 +91,7 @@ export default babel => {
       Program(path1) {
         path1.traverse({
           'ObjectMethod|ClassMethod'(path) {
-            if (firstParamIsH(t, path) || !hasJSX(t, path) || isInsideJSXExpression(t, path)) {
+            if (firstParamIsH(t, path) || !hasJSX(t, path) || isInsideJSXExpression(t, path) || hasDefinedHVariable(t, path)) {
               return
             }
 

@@ -22,14 +22,14 @@ const App = {
   setup() {
     return () => [
       h('div', { attrs: { id: 'header' } }, [
-        h('h1', 'Vue 2 JSX Explorer'),
+        h('h1', 'JSX-Vue2 Playground'),
         h(
           'a',
           {
-            // FIXME:
-            href: 'https://github.com/vuejs/jsx-vue2',
-            // href: 'https://app.netlify.com/sites/vue-next-jsx-explorer/deploys',
-            target: '_blank',
+            attrs: {
+              href: 'https://app.netlify.com/sites/jsx-vue2-playground/deploys',
+              target: '_blank',
+            },
           },
           'History',
         ),

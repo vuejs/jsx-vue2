@@ -275,7 +275,7 @@ export default function(babel) {
         t.jSXSpreadAttribute(
           t.objectExpression([
             t.objectProperty(
-              t.identifier('on'),
+              t.identifier(isNative ? 'nativeOn' : 'on'),
               t.objectExpression([t.objectProperty(t.stringLiteral(event), expression)]),
             ),
           ]),

@@ -30,6 +30,15 @@ const tests = [
     to: `render(h => <div nativeOn-click={foo}>test</div>);`,
   },
   {
+    name: 'v-on:click_native_capture',
+    from: `render(h => <div v-on:click_native_capture={foo}>test</div>)`,
+    to: `render(h => <div {...{
+  nativeOn: {
+    "!click": foo
+  }
+}}>test</div>);`,
+  },
+  {
     name: 'v-on:click with arrow function expression',
     from: `render(h => <div v-on:click={myEvent => foo(1, 2, 3, $myEvent)}>test</div>)`,
     to: `render(h => <div on-click={myEvent => foo(1, 2, 3, $myEvent)}>test</div>);`,

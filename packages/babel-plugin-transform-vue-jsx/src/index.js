@@ -173,6 +173,7 @@ const parseAttributeJSXAttribute = (t, path, attributes, tagName, elementType) =
   if (!valuePath.node) {
     value = t.booleanLiteral(true)
   } else if (t.isStringLiteral(valuePath)) {
+    valuePath.node.value = valuePath.node.value.replace(/\n\s+/g, ' ')
     value = valuePath.node
   } else {
     /* istanbul ignore else */
